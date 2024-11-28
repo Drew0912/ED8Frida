@@ -98,11 +98,11 @@ export function log(format: string, ...args: any[]): void {
     }
 
     const now = new Date;
-    const offset = (8 * 3600 - now.getTimezoneOffset()) / 3600;
+    const offset = (0 * 3600 - now.getTimezoneOffset()) / 3600;
     const time = sprintf('%02d:%02d:%02d.%03d', now.getHours() + offset, now.getMinutes(), now.getSeconds(), now.getMilliseconds());
     const msg = `${time} ${format}`;
     console.log(msg);
-    send({msg: 'log', data: msg});
+    //send({msg: 'log', data: msg});
 }
 
 export function arrayToBytes(data: number[]): ArrayBuffer {
@@ -178,12 +178,16 @@ export function getGameVersion(): string {
         case 0x6079B1DF: return 'ed84_us';
         case 0x60767137: return 'ed83_cn';
         case 0x62DA17AE: return 'ed9';
+        case 0x65D7A473: return 'ed85'; //NISA Reverie version 1.1.4
     }
 
     throw new Error('unknown game version');
 }
 
 let patchDirs = [
+    'Higher/',
+    'Drew0912/',
+    'mod/',
     'patch/',
     'ouroboros/',
     'data_cn/',

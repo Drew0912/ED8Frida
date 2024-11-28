@@ -7,6 +7,7 @@ export const Modules = {
     ED83        : modules[0],
     ED84        : modules[0],
     ED9         : modules[0],
+    ED85        : modules[0],
 };
 
 export const API = {

@@ -20,6 +20,11 @@ function main() {
                 ed9.main();
             });
             break;
+        case 'ed85':
+            import("./ed85/ed85").then(ed85 => {
+                ed85.main();
+            });
+            break;
     }
 }
 
