@@ -1,5 +1,15 @@
-.vscode
-
 node_modules
 
+hnk.js
+
+# User-specific files
+*.user
+.vs/
+.vscode
+
+# Build
+x64/
+
+# ED8Frida
+node_modules
 hnk.js
