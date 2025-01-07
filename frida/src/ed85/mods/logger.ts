@@ -1,10 +1,11 @@
 import { Addrs } from "../addrs";
 import * as utils from "../../utils";
+import { Interceptor2 } from "../../utils";
 
 // Param1 = level, Param2 = format, Param3... = ...args.
 export function hookLoggerPrintf() {
     //0x14071fd80 (some implementation of printf)
-    Interceptor.attach(Addrs.Logger_Output_Printf, {
+    Interceptor.attach(Addrs.Logger.Output_Printf, {
         onEnter: function(args) {
             // const intLevel = args[0].toInt32()!;
             // utils.log(intLevel.toString()); 
@@ -104,14 +105,45 @@ export function hookLoggerPrintf() {
                 count++;
             }
             // utils.log(format.charCodeAt(0).toString());
-            utils.log(s.slice(0, -1)); //-1 to cut newline char.
+            if (s.substring(s.length - 1) == '\n') {
+                utils.log(s.substring(0, s.length - 1));
+            } else {
+                utils.log(s);
+            }
+            // utils.log(s.slice(0, -1)); //-1 to cut newline char.
         },
     })
 }
 
+// More accurate logger but gives less information.
+export function Logger2() {
+    Interceptor2.jmp(
+        Addrs.Logger.Ansi2UTF8,
+        function(output: NativePointer, outputSize: NativePointer, input: NativePointer) {
+            const s = input.readUtf8String()!
+            output.writeUtf8String(s.slice(0, outputSize.toUInt32()));
+        },
+        'void', ['pointer', 'pointer', 'pointer'],
+    );
+
+    const Logger_Output = Interceptor2.jmp(
+        Addrs.Logger.OutputDebugStringW,
+        function(self: NativePointer, level: NativePointer, buffer: NativePointer) {
+            const buf = buffer.readUtf8String()!;
+            if (buf.substring(buf.length - 1) == '\n') {
+                utils.log(buf.substring(0, buf.length - 1));
+            } else {
+                utils.log(buf);
+            }
+            Logger_Output(self, level, buffer);
+        },
+        'void', ['pointer', 'pointer', 'pointer'],
+    );
+}
+
 export function hookLoggerPrintfOutputFormatOnly() {
     // Output format with no functionality.
-    Interceptor.attach(Addrs.Logger_Output_Printf, {
+    Interceptor.attach(Addrs.Logger.Output_Printf, {
         onEnter: function(args) {
             const format = args[1].readUtf8String()!;
             utils.log(format);
