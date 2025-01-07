@@ -1,5 +1,16 @@
 # ED8 Frida
+Refer to [READMEOuroboros.md](READMEOuroboros.md) for original information, not in English.
 
-# Credits
-- ed83 Frida by Ouroboros
-    - https://github.com/Ouroboros/Falcom/tree/master/ED8/ed83
+## Supported games
+- Trails of Cold Steel 3 Chinese Version
+    - Refer to [READMEOuroboros.md](READMEOuroboros.md)
+- Trails of Cold Steel 4 Japanese Version (NISA 1.2) (Not Latest)
+    - Refer to [READMEOuroboros.md](READMEOuroboros.md)
+- Trails into Reverie (NISA V1.1.5) (Latest)
+
+Note that only Windows 10 has been tested. Frida has had some issues with Windows 10.
+
+## Features
+- Outputs debug information from the game to a command prompt.
+    - Note that not all information is complete due to having to writing a quick implementation of `printf` that does not support all string formats.
+    - ![ConsoleOutput.png](imgs/ConsoleOutput.png)

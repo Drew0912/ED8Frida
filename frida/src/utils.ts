@@ -129,6 +129,28 @@ export function UTF8(s: string): NativePointer {
     return s ? Memory.allocUtf8String(s) : NULL;
 }
 
+/*
+Function that takes in a string which contains a double in hex and 
+returns the double.
+*/
+export function hexDoubletoDouble(hexString : string) : number {
+    if (hexString === '0x0') {
+        return 0;
+    }
+    let buffer = new ArrayBuffer(8);
+    let hex = hexString.substring(2);
+    let bytes = new Uint8Array(buffer);
+
+    let count = 7;
+    for (let c = 0; c < hex.length; c += 2) {
+        bytes[count] = parseInt(hex.substring(c, c+2), 16);
+        count--;
+    }
+
+    let doubles = new Float64Array(buffer);
+    return doubles[0];
+}
+
 export function readFileContent(path: string): ArrayBuffer | null {
     const fp = API.crt.fopen(UTF8(path), UTF8('rb')) as NativePointer;
     if (fp.isNull()) {
