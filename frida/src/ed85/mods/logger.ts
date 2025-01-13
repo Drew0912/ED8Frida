@@ -4,7 +4,7 @@ import { Interceptor2 } from "../../utils";
 
 // Param1 = level, Param2 = format, Param3... = ...args.
 export function hookLoggerPrintf() {
-    //0x14071fd80 (some implementation of printf)
+    //some implementation of printf
     Interceptor.attach(Addrs.Logger.Output_Printf, {
         onEnter: function(args) {
             // const intLevel = args[0].toInt32()!;

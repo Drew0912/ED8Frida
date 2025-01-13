@@ -20,7 +20,8 @@ function main() {
                 ed9.main();
             });
             break;
-        case 'ed85':
+        case 'ed85_v115':
+        case 'ed85_v114':
             import("./ed85/ed85").then(ed85 => {
                 ed85.main();
             });

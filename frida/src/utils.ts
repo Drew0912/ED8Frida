@@ -200,8 +200,8 @@ export function getGameVersion(): string {
         case 0x6079B1DF: return 'ed84_us';
         case 0x60767137: return 'ed83_cn';
         case 0x62DA17AE: return 'ed9';
-        case 0x65D7A473: return 'ed85'; //NISA Reverie version 1.1.4
-        case 0x674EDE3F: return 'ed85'; //NISA Reverie version 1.1.5
+        case 0x65D7A473: return 'ed85_v114'; //NISA Reverie version 1.1.4
+        case 0x674EDE3F: return 'ed85_v115'; //NISA Reverie version 1.1.5
     }
 
     throw new Error('unknown game version');
