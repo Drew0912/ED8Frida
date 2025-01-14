@@ -15,3 +15,8 @@ Note that only Windows 10 has been tested. Frida has had some issues with Window
 - Outputs debug information from the game to a command prompt.
     - Note that not all information is complete due to having to writing a quick implementation of `printf` that does not support all string formats.
     - ![ConsoleOutput.png](imgs/ConsoleOutput.png)
+- Modifies info strings to indicate that ED8Frida is running along with support for custom strings.
+    - Includes version number on title screen. Does work along side Senpatcher.
+    - Adds Frida Enabled to the window title name.
+- File Redirection for modified files.
+    - Recommend you use Senpatcher over this to do mod loading.

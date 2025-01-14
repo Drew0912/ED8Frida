@@ -32,6 +32,12 @@ export const Addrs = (function() {
                     TitleScreenVerStringCode : Modules.ED85.base.add(0x654D16), // Instruction after lea rdx.
                     WindowTextString : Modules.ED85.base.add(0x0B7EAC), //Instruction after loading regs.
                 },
+
+                File: {
+                    Open : Modules.ED85.base.add(0x088C70),
+                    GetSize : Modules.ED85.base.add(0x089120),
+                    DLCAssetIO : Modules.ED85.base.add(0x06DAA0),
+                },
             };
         case 'ed85_v114':
             return {
@@ -46,6 +52,12 @@ export const Addrs = (function() {
                     TitleScreenVerStringData : Modules.ED85.base.add(0xC62890),
                     TitleScreenVerStringCode : Modules.ED85.base.add(0x65AF66), // Instruction after lea rdx.
                     WindowTextString : Modules.ED85.base.add(0x0B7C5C), //Instruction after loading regs.
+                },
+
+                File: {
+                    Open : Modules.ED85.base.add(0x088580),
+                    GetSize : Modules.ED85.base.add(0x088A30),
+                    DLCAssetIO : Modules.ED85.base.add(0x06D9A0),
                 },
             };
     }
