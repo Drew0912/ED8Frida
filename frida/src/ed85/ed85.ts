@@ -2,7 +2,7 @@ import * as utils from "../utils";
 
 import { hookLoggerPrintf, hookLoggerPrintfOutputFormatOnly } from "./mods/logger";
 import { addToWindowText, changeTitleVerString } from "./mods/changeInfoString";
-import { FileRedirection } from "./mods/FileRedirection";
+import { fileRedirection } from "./mods/fileRedirection";
 import { hookActMenu, loadDebug } from "./mods/debugScript";
 
 function test() {
@@ -14,7 +14,7 @@ export function main() {
     utils.log("Reverie Frida script loaded.");
     // Add setting UseSigScan here.
 
-    FileRedirection();
+    fileRedirection();
     loadDebug();
     hookActMenu();
     hookLoggerPrintf();

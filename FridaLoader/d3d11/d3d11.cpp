@@ -1,6 +1,5 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
-#include "d3d11.h"
 
 #include <iostream>
 #include <fstream>
@@ -44,14 +43,14 @@ extern "C" HRESULT  D3D11CreateDeviceAndSwapChain(
     D3D_DRIVER_TYPE DriverType,
     HMODULE Software,
     UINT Flags,
-    const D3D_FEATURE_LEVEL* pFeatureLevels,
+    const D3D_FEATURE_LEVEL * pFeatureLevels,
     UINT FeatureLevels,
     UINT SDKVersion,
-    const DXGI_SWAP_CHAIN_DESC* pSwapChainDesc,
-    IDXGISwapChain** ppSwapChain,
-    ID3D11Device** ppDevice,
-    D3D_FEATURE_LEVEL* pFeatureLevel,
-    ID3D11DeviceContext** ppImmediateContext
+    const DXGI_SWAP_CHAIN_DESC * pSwapChainDesc,
+    IDXGISwapChain * *ppSwapChain,
+    ID3D11Device * *ppDevice,
+    D3D_FEATURE_LEVEL * pFeatureLevel,
+    ID3D11DeviceContext * *ppImmediateContext
 ) {
     PD3D11CreateDeviceAndSwapChain addr = GetD3D11CreateDeviceAndSwapChainAddress();
     return addr(pAdapter,
@@ -99,16 +98,16 @@ static PD3D11CreateDevice GetD3D11CreateDeviceAddress() {
 }
 
 extern "C" HRESULT D3D11CreateDevice(
-    IDXGIAdapter* pAdapter,
+    IDXGIAdapter * pAdapter,
     D3D_DRIVER_TYPE DriverType,
     HMODULE Software,
     UINT Flags,
-    const D3D_FEATURE_LEVEL* pFeatureLevels,
+    const D3D_FEATURE_LEVEL * pFeatureLevels,
     UINT FeatureLevels,
     UINT SDKVersion,
-    ID3D11Device** ppDevice,
-    D3D_FEATURE_LEVEL* pFeatureLevel,
-    ID3D11DeviceContext** ppImmediateContext
+    ID3D11Device * *ppDevice,
+    D3D_FEATURE_LEVEL * pFeatureLevel,
+    ID3D11DeviceContext * *ppImmediateContext
 )
 {
     PD3D11CreateDevice addr = GetD3D11CreateDeviceAddress();

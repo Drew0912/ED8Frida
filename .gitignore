@@ -1,6 +1,5 @@
+# nodejs
 node_modules
-
-hnk.js
 
 # User-specific files
 *.user
@@ -9,7 +8,7 @@ hnk.js
 
 # Build
 x64/
-
-# ED8Frida
-node_modules
 hnk.js
+
+# Frida
+frida-core.lib

@@ -4,7 +4,7 @@ import * as utils from "../../utils";
 import { API } from "../../modules";
 import { sprintf } from "sprintf-js";
 
-export function FileRedirection() {
+export function fileRedirection() {
     const File_Open = Interceptor2.jmp(
         Addrs.File.Open,
         function(self: NativePointer, path: NativePointer, mode: NativePointer): NativePointer {
