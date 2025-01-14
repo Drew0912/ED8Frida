@@ -1,7 +1,9 @@
+import * as utils from "../utils";
+
 import { hookLoggerPrintf, hookLoggerPrintfOutputFormatOnly } from "./mods/logger";
 import { addToWindowText, changeTitleVerString } from "./mods/changeInfoString";
-import * as utils from "../utils";
 import { FileRedirection } from "./mods/FileRedirection";
+import { hookActMenu, loadDebug } from "./mods/debugScript";
 
 function test() {
     
@@ -13,6 +15,8 @@ export function main() {
     // Add setting UseSigScan here.
 
     FileRedirection();
+    loadDebug();
+    hookActMenu();
     hookLoggerPrintf();
     changeTitleVerString();
     addToWindowText();

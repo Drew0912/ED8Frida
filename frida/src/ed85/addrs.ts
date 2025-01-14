@@ -38,6 +38,23 @@ export const Addrs = (function() {
                     GetSize : Modules.ED85.base.add(0x089120),
                     DLCAssetIO : Modules.ED85.base.add(0x06DAA0),
                 },
+
+                ED85: {
+                    SharedInstance : Modules.ED85.base.add(0xE7CFE0),
+                    HandleActMenu : Modules.ED85.base.add(0x32B410),
+                },
+
+                Script: {
+                    Load : Modules.ED85.base.add(0x59CA10),
+                    Call : Modules.ED85.base.add(0x59CD20),
+                },
+
+                ScriptManager: {
+                    LoadLibraries : Modules.ED85.base.add(0x2CD130),
+                    GetScriptByID : Modules.ED85.base.add(0x59BC20),
+                    // InitScripts   : Modules.ED85.base.add(0x2CB5F0), //v1.0.8
+                    // InitED8Script : Modules.ED85.base.add(0x10D410), //v1.0.8
+                },
             };
         case 'ed85_v114':
             return {
@@ -59,6 +76,53 @@ export const Addrs = (function() {
                     GetSize : Modules.ED85.base.add(0x088A30),
                     DLCAssetIO : Modules.ED85.base.add(0x06D9A0),
                 },
+
+                ED85: {
+                    SharedInstance : Modules.ED85.base.add(0xE87060),
+                    HandleActMenu : Modules.ED85.base.add(0x32BDA0),
+                },
+
+                Script: {
+                    Load : Modules.ED85.base.add(0x5A2A90),
+                    Call : Modules.ED85.base.add(0x5A2DA0),
+                },
+
+                ScriptManager: {
+                    LoadLibraries : Modules.ED85.base.add(0x2CD880),
+                    GetScriptByID : Modules.ED85.base.add(0x5A1CA0),
+                    // InitScripts   : Modules.ED85.base.add(0x2CB5F0), //v1.0.8
+                    // InitED8Script : Modules.ED85.base.add(0x10D410), //v1.0.8
+                },
             };
     }
+})();
+
+export const Offsets = (function() {
+    return {
+        ED85 : {
+            ScriptManager : 0x1DA8,
+        },
+
+        ScriptManager : {
+            ThreadContext : 0x190B8,
+            SizeOfThreadContext : 0x870,
+
+            Scripts: { //param_1 + Offset
+                btlcom : 0x3B8D0,
+                face : 0x21730,
+                common : 0x24948,
+                btlsys : 0x311A8,
+                btlwin : 0x34C30,
+                infsys : 0x386B8,
+                system2 : 0x27B60,
+                system3 : 0x2AD78,
+                system4 : 0x2DF90,
+                sound : 0x3F358,
+                sound2 : 0x42570,
+                tk_common : 0x45788,
+                title00 : 0x1E518,
+                debug : 0x21730, // Merge face.dat and debug.dat
+            },
+        },
+    };
 })();

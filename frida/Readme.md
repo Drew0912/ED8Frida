@@ -20,3 +20,7 @@ Note that only Windows 10 has been tested. Frida has had some issues with Window
     - Adds Frida Enabled to the window title name.
 - File Redirection for modified files.
     - Recommend you use Senpatcher over this to do mod loading.
+- Adds support for `debug.dat` and calling `debug.dat` and a custom debug menu.
+    - Debug menu can be called from overworld where the ARCUS act menu can be used. Press `shift` and the button to open the ARCUS act menu (default key R).
+    - To avoid conflicts loading/finding `debug.dat`, `debug.dat` can be either in its default location `data/scripts/scena/dat_en/debug.dat` (lower priority) or in the directory with `hnk.exe` or `bin/Win64/debug.dat` (higher priority).
+    - ![DebugMenu.png](imgs/DebugMenu.png)May not be latest debug menu.
