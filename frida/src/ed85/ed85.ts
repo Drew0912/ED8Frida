@@ -1,5 +1,5 @@
 import { hookLoggerPrintf, hookLoggerPrintfOutputFormatOnly } from "./mods/logger";
-import { changeTitleVerString } from "./mods/changeInfoString";
+import { addToWindowText, changeTitleVerString } from "./mods/changeInfoString";
 import * as utils from "../utils";
 
 function test() {
@@ -13,6 +13,7 @@ export function main() {
 
     // hookLoggerPrintf();
     changeTitleVerString();
+    addToWindowText();
     // test();
 
 }
