@@ -26,15 +26,21 @@ export const Addrs = (function() {
                     Ansi2UTF8 : Modules.ED85.base.add(0x0B3020),
                     Output_Printf : !UseSigScan ? Modules.ED85.base.add(0x71FC00) : sigScan('F7 C1 FD FF FF FF ?? ?? ?? ?? ?? ?? 48 89 54 24 10 4C 89 44 24 18 4C 89 4C 24 20 53 B8 60 40 00 00 ?? ?? ?? ?? ?? 48 2B E0'),
                 },
+
+                TitleScreenVerStringData : Modules.ED85.base.add(0xC59B2C),
+                TitleScreenVerStringCode : Modules.ED85.base.add(0x654D16), // Instruction after lea rdx.
             };
-        case 'ed85_v114':
-            return {
-                Logger: {
-                    OutputDebugStringW : Modules.ED85.base.add(0x0B3D90), // Covers less strings, more accurate as does not need printf.
-                    OutputDebugStringA : Modules.ED85.base.add(0x727940), // Never called?
-                    Ansi2UTF8 : Modules.ED85.base.add(0x0B2EF0),
-                    Output_Printf : Modules.ED85.base.add(0x727970),
-                },
-            };
+        // case 'ed85_v114':
+        //     return {
+        //         Logger: {
+        //             OutputDebugStringW : Modules.ED85.base.add(0x0B3D90), // Covers less strings, more accurate as does not need printf.
+        //             OutputDebugStringA : Modules.ED85.base.add(0x727940), // Never called?
+        //             Ansi2UTF8 : Modules.ED85.base.add(0x0B2EF0),
+        //             Output_Printf : Modules.ED85.base.add(0x727970),
+        //         },
+
+        //         TitleScreenVerStringData : Modules.ED85.base.add(0xC62890),
+        //         // TitleScreenVerStringCode : Modules.ED85.base.add(0x654D16), // Instruction after lea rdx.
+        //     };
     }
 })();

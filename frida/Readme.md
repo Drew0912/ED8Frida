@@ -7,7 +7,7 @@ Refer to [READMEOuroboros.md](READMEOuroboros.md) for original information, not 
 - Trails of Cold Steel 4 Japanese Version (NISA 1.2) (Not Latest)
     - Refer to [READMEOuroboros.md](READMEOuroboros.md)
 - Trails into Reverie (NISA V1.1.5) (Latest)
-    - V1.1.4 (for GOG release) is also supported but not tested.
+    - V1.1.4 (for GOG release) is also supported but not tested so may not work.
 
 Note that only Windows 10 has been tested. Frida has had some issues with Windows 10.
 
