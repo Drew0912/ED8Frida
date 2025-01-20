@@ -29,7 +29,26 @@ export enum ScriptId {
 }
 
 export interface IConfig {
-    patchDirs   : string[];
+    patchDirs : string[],
+    isSetPatchDirs : boolean,
+    isOpenCommandPrompt : boolean,
+    isFileRedirection : boolean,
+    isLoadDebug : boolean,
+    isHookActMenu : boolean,
+    isOutputDebugInfo : number,
+    isChangeTitleVerString : [boolean, string, boolean],
+    isAddToWindowText : boolean,
+}
+let defaultConfig: IConfig = {
+    patchDirs : ['data/'],
+    isSetPatchDirs : false,
+    isOpenCommandPrompt: false,
+    isFileRedirection : false,
+    isLoadDebug : false,
+    isHookActMenu : false,
+    isOutputDebugInfo : 0,
+    isChangeTitleVerString : [true, 'ED8Frida - No config file found', true],
+    isAddToWindowText : true,
 }
 
 export class Script extends ED8BaseObject {
@@ -111,7 +130,7 @@ export class ScriptManager extends ED8BaseObject {
 
 export class ED85 extends ED8BaseObject {
     private static _sharedInstance: ED85;
-    private static _config: IConfig | undefined;
+    private static _config: IConfig;
 
     static get sharedInstance(): ED85 {
         if (this._sharedInstance)
@@ -131,7 +150,7 @@ export class ED85 extends ED8BaseObject {
         return new ScriptManager(this.sharedInstance.readPointer(Offsets.ED85.ScriptManager));
     }
 
-    static getConfig(): IConfig | undefined {
+    static getConfig(): IConfig {
         if (this._config)
             return this._config;
 
@@ -140,7 +159,7 @@ export class ED85 extends ED8BaseObject {
             // utils.log('config file location: %s', exePath);
             const config = utils.readFileContent(exePath);
             if (!config)
-                return undefined;
+                return defaultConfig;
 
             const s = Buffer.from(config).toString('utf8');
 
@@ -151,7 +170,7 @@ export class ED85 extends ED8BaseObject {
                 utils.log('load config: %s', e);
             }
 
-            return undefined;
+            return defaultConfig;
         }();
 
         return this._config;

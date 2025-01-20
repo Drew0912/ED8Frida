@@ -1,5 +1,5 @@
 {
-    // directories for mod loading, priority top to bottom.
+    // directories for mod loading, priority top to bottom. 'isSetPatchDirs' has to be true.
     patchDirs: [
         'Higher/',
         'Drew0912/',
@@ -7,4 +7,29 @@
         'patch/',
         'data/',
     ],
+    isSetPatchDirs: true,
+    // Whether command prompt is opened. All output info is sent to cmd.
+    isOpenCommandPrompt: true,
+    // Whether file redirection is used or not. Recommended to use Senpatcher instead.
+    isFileRedirection: true,
+    // Whether 'debug.dat' is loaded and usable in game. Required 'face.dat' to be put into debug.dat. 
+    isLoadDebug: true,
+    // Whether function 'FC_ActMenu_Mod' in 'debug.dat' can be called by pressing SHIFT and the button to open ARCUS menu.
+    isHookActMenu: true,
+    // Whether to output debug info to command prompt and the level.
+    // 0 for no info.
+    // 1 for most info (recommended).
+    // 2 for less info but more accurate strings (useful is 1 is not good).
+    // 3 is for the string formats only.
+    isOutputDebugInfo: 1,
+    // First parameter is whether to enable changing the version string on the title screen.
+    // Second parameter is the custom string to use.
+    // Third parameter is to keep the version number in the string.
+    isChangeTitleVerString: [
+        true,
+        'ED8Frida',
+        true,
+    ],
+    // Whether to add the text "Frida Enabled" to the game window title.
+    isAddToWindowText: true,
 }

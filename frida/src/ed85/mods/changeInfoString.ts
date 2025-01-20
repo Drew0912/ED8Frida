@@ -1,7 +1,7 @@
 import { Addrs } from "../addrs";
 
 // Data
-export function changeTitleVerString2(str: string="ED8Frida Mod", includeOriginalString: boolean=true) {
+export function changeTitleVerString2(str: string="ED8Frida", includeOriginalString: boolean=true) {
     let originalString = "";
     if (includeOriginalString){
         originalString = Addrs.InfoString.TitleScreenVerStringData.readAnsiString()!;
@@ -12,7 +12,7 @@ export function changeTitleVerString2(str: string="ED8Frida Mod", includeOrigina
 }
 
 // Code
-export function changeTitleVerString(str: string="ED8Frida Mod", includeOriginalString: boolean=true) {
+export function changeTitleVerString(str: string="ED8Frida", includeOriginalString: boolean=true) {
     let replaceVal: NativePointer;
     Interceptor.attach(Addrs.InfoString.TitleScreenVerStringCode, {
         onEnter: function() {
