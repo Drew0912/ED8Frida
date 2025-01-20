@@ -4,7 +4,10 @@
 #include <iostream>
 #include <fstream>
 
-const bool DEBUGCONSOLE = TRUE;
+// Unless you need info about FridaLoader specifically, create cmd from frida script instead.
+// If no option, add below line to top of js frida script
+// (new NativeFunction(Process.getModuleByName('KERNEL32.DLL').getExportByName('AllocConsole'), "bool", [], 'win64'))();
+const bool DEBUGCONSOLE = FALSE;
 
 // d3d11
 using PD3D11CreateDeviceAndSwapChain = HRESULT(*)(
@@ -21,7 +24,6 @@ using PD3D11CreateDeviceAndSwapChain = HRESULT(*)(
     D3D_FEATURE_LEVEL* pFeatureLevel,
     ID3D11DeviceContext** ppImmediateContext
     );
-
 static PD3D11CreateDeviceAndSwapChain GetD3D11CreateDeviceAndSwapChainAddress() {
     char path[MAX_PATH];
     if (!GetSystemDirectoryA(path, MAX_PATH)) return nullptr;
@@ -30,13 +32,11 @@ static PD3D11CreateDeviceAndSwapChain GetD3D11CreateDeviceAndSwapChainAddress() 
     HMODULE d3d11 = LoadLibraryA(path);
 
     if (!d3d11) {
-        MessageBox(NULL, L"GetD3D11CreateDeviceAndSwapChainAddress(), could not find d3d11.dll", L"Error", 0);
+        printf("[*] GetD3D11CreateDeviceAndSwapChainAddress(), could not find d3d11.dll");
         return nullptr;
     }
-
     return (PD3D11CreateDeviceAndSwapChain)*GetProcAddress(d3d11, "D3D11CreateDeviceAndSwapChain");
 }
-
 extern "C" HRESULT  D3D11CreateDeviceAndSwapChain(
     IDXGIAdapter * pAdapter,
     D3D_DRIVER_TYPE DriverType,
@@ -67,7 +67,6 @@ extern "C" HRESULT  D3D11CreateDeviceAndSwapChain(
     );
 }
 
-
 using PD3D11CreateDevice = HRESULT(*)(
     IDXGIAdapter* pAdapter,
     D3D_DRIVER_TYPE DriverType,
@@ -80,7 +79,6 @@ using PD3D11CreateDevice = HRESULT(*)(
     D3D_FEATURE_LEVEL* pFeatureLevel,
     ID3D11DeviceContext** ppImmediateContext
     );
-
 static PD3D11CreateDevice GetD3D11CreateDeviceAddress() {
     char path[MAX_PATH];
     if (!GetSystemDirectoryA(path, MAX_PATH)) return nullptr;
@@ -89,13 +87,11 @@ static PD3D11CreateDevice GetD3D11CreateDeviceAddress() {
     HMODULE d3d11 = LoadLibraryA(path);
 
     if (!d3d11) {
-        MessageBox(NULL, L"GetD3D11CreateDeviceAddress(), could not find d3d11.dll", L"Error", 0);
+        printf("[*] GetD3D11CreateDeviceAddress(), could not find d3d11.dll");
         return nullptr;
     }
-
     return (PD3D11CreateDevice)*GetProcAddress(d3d11, "D3D11CreateDevice");
 }
-
 extern "C" HRESULT D3D11CreateDevice(
     IDXGIAdapter * pAdapter,
     D3D_DRIVER_TYPE DriverType,
@@ -139,8 +135,39 @@ std::string static GetScript() {
     return contents;
 }
 
+class FridaLoader {
+protected:
+    HANDLE hFridaEvent;
+    std::string script;
+    GMainLoop* loop = NULL;
+
+public:
+    FridaLoader() {
+        printf("[*] Creating FridaLoader.\n");
+        this->hFridaEvent = CreateEventA(NULL, FALSE, FALSE, "FridaEvent");
+        if (this->hFridaEvent == NULL) {
+            printf("[*] hFridaEvent Failed: (%d)\n", GetLastError());
+        }
+    }
+    ~FridaLoader() {
+        printf("[*] Terminating FridaLoader\n");
+        this->Stop();
+        WaitForSingleObject(hFridaEvent, INFINITE);
+        CloseHandle(this->hFridaEvent);
+    }
+
+    static void on_message(FridaScript* script, const gchar* message, GBytes* data, gpointer user_data);
+
+    int Start();
+    int Stop();
+protected:
+    int FridaCore();
+
+};
+FridaLoader* gFrida;
+
 // Frida on_message
-static void on_message(FridaScript* script, const gchar* message, GBytes* data, gpointer user_data) {
+void FridaLoader::on_message(FridaScript* script, const gchar* message, GBytes* data, gpointer user_data) {
     JsonParser* parser;
     JsonObject* root;
     const gchar* type;
@@ -168,64 +195,22 @@ static void on_message(FridaScript* script, const gchar* message, GBytes* data, 
     g_object_unref(parser);
 }
 
-class FridaLoader {
-protected:
-    HANDLE hInitEvent, hExitEvent;
-    //HANDLE hFridaThread;
-    std::string script;
-    GMainLoop* loop = NULL;
-
-public:
-    FridaLoader() {
-        printf("[*] Creating FridaLoader.\n");
-        this->hInitEvent = CreateEventA(NULL, FALSE, FALSE, "InitThread");
-        if (this->hInitEvent == NULL) {
-            printf("[*] hInitEvent Failed: (%d)\n", GetLastError());
-        }
-
-        this->hExitEvent = CreateEventA(NULL, FALSE, FALSE, "ExitThread");
-        if (this->hExitEvent == NULL) {
-            printf("[*] hExitEvent Failed: (%d)\n", GetLastError());
-        }
-        printf("[*] Finished creating FridaLoader\n");
-    }
-    ~FridaLoader() {
-        printf("[*] Terminating FridaLoader\n");
-        //this->Stop();
-        WaitForSingleObject(hExitEvent, INFINITE);
-        CloseHandle(this->hInitEvent);
-        CloseHandle(this->hExitEvent);
-    }
-
-    int Start();
-    int Stop();
-
-protected:
-    int FridaCore();
-
-};
-
-FridaLoader* gFrida;
-
 int FridaLoader::Start() {
     printf("[*] FridaLoader::Start\n");
 
     this->script = GetScript();
-
     this->FridaCore();
-    //WaitForSingleObject(this->hInitEvent, INFINITE);
-    //printf("[*] WaitForSingleObject Finished");
-
     return 1;
 }
 
-
 int FridaLoader::Stop() {
-    //Add check if FridaCore is running.
+    //Add check if FridaCore is running. 
 
-    SetEvent(this->hExitEvent);
+    if (g_main_loop_is_running(loop))
+        g_main_loop_quit(loop);
+        g_main_loop_unref(loop);
 
-    //
+    SetEvent(this->hFridaEvent);
 
     return 1;
 }
@@ -291,6 +276,7 @@ int FridaLoader::FridaCore() {
             FILE* new_stdout;
             freopen_s(&new_stdout, "CONOUT$", "wb", stdout);
             SetConsoleOutputCP(CP_UTF8);
+            SetConsoleTitle(L"ED8Frida");
         }
 
         if (g_main_loop_is_running(loop))
@@ -321,7 +307,7 @@ int FridaLoader::FridaCore() {
 
     g_main_loop_unref(loop);
 
-    SetEvent(this->hInitEvent);
+    SetEvent(this->hFridaEvent);
 
     return 0;
 }
