@@ -11,6 +11,7 @@
 #include "framework.h"
 #include "d3d11.h"
 
+#pragma comment(lib, "Setupapi.lib") //Needed for frida-core, using V16.4.10 as later versions have issues.
 #include "frida-core/frida-core.h"
 
 #endif //PCH_H
