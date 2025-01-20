@@ -1,0 +1,10 @@
+{
+    // directories for mod loading, priority top to bottom.
+    patchDirs: [
+        'Higher/',
+        'Drew0912/',
+        'mod/',
+        'patch/',
+        'data/',
+    ],
+}

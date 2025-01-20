@@ -212,17 +212,16 @@ export function getGameVersion(): string {
 }
 
 let patchDirs = [
-    'Higher/',
-    'Drew0912/',
-    'mod/',
+    'dev/',
     'patch/',
-    'ouroboros/',
-    'data_cn/',
+    'mod/',
+    'data/',
 ];
 
 export function setPatchDirs(dirs: string[]) {
     if (dirs?.length) {
         patchDirs = dirs;
+        patchDirs.push('data/');
         log(`new patch dirs: ${patchDirs}`);
     }
 }

@@ -1,5 +1,9 @@
+import * as json5 from "json5"
+import * as path from "path"
+import { Modules } from "../modules";
 import { Addrs, Offsets} from "./addrs";
 import { ED8BaseObject, ED8Vector, Interceptor2, isPathExists} from "../utils";
+import * as utils from "../utils";
 
 
 export enum ScriptId {
@@ -22,6 +26,10 @@ export enum ScriptId {
     BtlItem             = 0x1A,
     Sound2              = 0x1B,
     BtlScript           = 0x1C,
+}
+
+export interface IConfig {
+    patchDirs   : string[];
 }
 
 export class Script extends ED8BaseObject {
@@ -103,6 +111,7 @@ export class ScriptManager extends ED8BaseObject {
 
 export class ED85 extends ED8BaseObject {
     private static _sharedInstance: ED85;
+    private static _config: IConfig | undefined;
 
     static get sharedInstance(): ED85 {
         if (this._sharedInstance)
@@ -120,6 +129,32 @@ export class ED85 extends ED8BaseObject {
 
     static get scriptManager(): ScriptManager {
         return new ScriptManager(this.sharedInstance.readPointer(Offsets.ED85.ScriptManager));
+    }
+
+    static getConfig(): IConfig | undefined {
+        if (this._config)
+            return this._config;
+
+        this._config = function() {
+            const exePath = path.join(path.dirname(path.dirname(path.dirname(Modules.ED85.path.split('\\').join('/')))), 'bin', 'Win64', 'config_ED8Frida.json5');
+            // utils.log('config file location: %s', exePath);
+            const config = utils.readFileContent(exePath);
+            if (!config)
+                return undefined;
+
+            const s = Buffer.from(config).toString('utf8');
+
+            try {
+                const cfg: IConfig = json5.parse(s);
+                return cfg;
+            } catch (e) {
+                utils.log('load config: %s', e);
+            }
+
+            return undefined;
+        }();
+
+        return this._config;
     }
     
 }
