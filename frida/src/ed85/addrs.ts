@@ -42,11 +42,13 @@ export const Addrs = (function() {
                 ED85: {
                     SharedInstance : Modules.ED85.base.add(0xE7CFE0),
                     HandleActMenu : Modules.ED85.base.add(0x32B410),
+                    PlayerSBreak : Modules.ED85.base.add(0x0DCF50),
                 },
 
                 Script: {
                     Load : Modules.ED85.base.add(0x59CA10),
                     Call : Modules.ED85.base.add(0x59CD20),
+                    ScriptInterpreter : Modules.ED85.base.add(0x59DCA0),
                 },
 
                 ScriptManager: {
@@ -80,11 +82,13 @@ export const Addrs = (function() {
                 ED85: {
                     SharedInstance : Modules.ED85.base.add(0xE87060),
                     HandleActMenu : Modules.ED85.base.add(0x32BDA0),
+                    PlayerSBreak : Modules.ED85.base.add(0x0DC9C0),
                 },
 
                 Script: {
                     Load : Modules.ED85.base.add(0x5A2A90),
                     Call : Modules.ED85.base.add(0x5A2DA0),
+                    ScriptInterpreter : Modules.ED85.base.add(0x5A3D30),
                 },
 
                 ScriptManager: {
@@ -106,6 +110,7 @@ export const Offsets = (function() {
         ScriptManager : {
             ThreadContext : 0x190B8,
             SizeOfThreadContext : 0x870,
+            BattleProc : 0x6CB70,
 
             Scripts: { //param_1 + Offset
                 btlcom : 0x3B8D0,
@@ -123,6 +128,13 @@ export const Offsets = (function() {
                 title00 : 0x1E518,
                 debug : 0x21730, // Merge face.dat and debug.dat
             },
+        },
+
+        BattleProc : {
+            allBattleCharWork : 0x100,
+            onlyPlayerBattleCharWork : 0x110,
+
+            SBreakParam1 : 0x8188,
         },
     };
 })();

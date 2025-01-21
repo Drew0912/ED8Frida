@@ -1,12 +1,13 @@
 import * as utils from "../utils";
 import { API } from "../modules";
+import { ED85 } from "./types";
 
 // Imported mods.
 import { outputDebugInfo } from "./mods/logger";
 import { addToWindowText, changeTitleVerString } from "./mods/changeInfoString";
 import { fileRedirection } from "./mods/fileRedirection";
 import { hookActMenu, loadDebug } from "./mods/debugScript";
-import { ED85 } from "./types";
+import { hookScriptExtender } from "./mods/scriptExtender";
 
 function test() {
     
@@ -36,6 +37,7 @@ export function main() {
         changeTitleVerString(ED85.getConfig().isChangeTitleVerString[1], ED85.getConfig().isChangeTitleVerString[2]);
     if (ED85.getConfig().isAddToWindowText)
         addToWindowText();
+    hookScriptExtender();
     // test();
 
 }

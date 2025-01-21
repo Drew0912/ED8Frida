@@ -126,11 +126,17 @@ export class ScriptManager extends ED8BaseObject {
     get tk_common(): Script {
         return new Script(this.pointer.add(Offsets.ScriptManager.Scripts.tk_common));
     }
+
+    get battleProc(): BattleProc {
+        return new BattleProc(this.readPointer(Offsets.ScriptManager.BattleProc));
+    }
 }
 
 export class ED85 extends ED8BaseObject {
     private static _sharedInstance: ED85;
     private static _config: IConfig;
+
+    private static playerSBreakFunction = new NativeFunction(Addrs.ED85.PlayerSBreak, 'uint16', ['pointer', 'pointer', 'bool', 'uint32', 'uint16']);
 
     static get sharedInstance(): ED85 {
         if (this._sharedInstance)
@@ -175,5 +181,43 @@ export class ED85 extends ED8BaseObject {
 
         return this._config;
     }
+
+    static get battleProc(): BattleProc {
+        return this.scriptManager.battleProc;
+    }
     
+    static enemySBreak(enemyNumber: number) {
+        // 0x100 contains all BattleCharWork, 0x110 contains all player BattleCharWork
+        for (let i = 7; i > 0; i--) {
+            const BattleCharWork100 = ED85.battleProc.allBattleCharWork.add(i*8).readPointer();
+            const BattleCharWork110 = ED85.battleProc.onlyPlayerBattleCharWork.add(i*8).readPointer();
+            if (BattleCharWork100.equals(BattleCharWork110)) {
+                ED85.playerSBreakFunction(ED85.battleProc.SBreakParam1, ED85.battleProc.allBattleCharWork.add((i+enemyNumber)*8).readPointer(), 1, 0, 0);
+                // last param is position in sbreak queue?, param3 is sbreak logo, 1 means yes.
+                // utils.log(Addrs.ED85.SharedInstance.readPointer().add(Offsets.ED85.ScriptManager).readPointer().add(0x6cb70).readPointer().add(0x21C).readPointer().readU32().toString());
+    
+                // Below Works
+                // const testBtlChr = new BattleCharacter(Addrs.ED85.SharedInstance.readPointer().add(Offsets.ED85.ScriptManager).readPointer().add(0x6cb70).readPointer().add(0x100).readPointer().add((i+enemyNum)*8).readPointer());
+                // utils.log("SBreak Char Name: " + testBtlChr.character.name);
+                break;
+            }
+        }
+    }
+}
+
+export class BattleProc extends ED8BaseObject {
+    get allBattleCharWork(): NativePointer {
+        return this.readPointer(Offsets.BattleProc.allBattleCharWork);
+    } 
+
+    // Mostly same as above but no pointers for enemy BattleCharacter.
+    get onlyPlayerBattleCharWork(): NativePointer {
+        return this.readPointer(Offsets.BattleProc.onlyPlayerBattleCharWork);
+    }
+
+    // Pointer used in ED85.playerSBreakFunction.
+    // May be useful for other things.
+    get SBreakParam1(): NativePointer {
+        return this.readPointer(Offsets.BattleProc.SBreakParam1);
+    }
 }

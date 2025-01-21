@@ -8,18 +8,18 @@
         'data/',
     ],
     isSetPatchDirs: true,
-    // Whether command prompt is opened. All output info is sent to cmd.
+    // Whether command prompt is opened. All output info from frida (not FridaLoader) is sent to cmd.
     isOpenCommandPrompt: true,
-    // Whether file redirection is used or not. Recommended to use Senpatcher instead.
+    // Whether file redirection is used or not using patchDirs. Recommended to use Senpatcher instead.
     isFileRedirection: true,
-    // Whether 'debug.dat' is loaded and usable in game. Required 'face.dat' to be put into debug.dat. 
+    // Whether 'debug.dat' is loaded and usable/callable in game. Requires 'face.dat' to be put into 'debug.dat'. 
     isLoadDebug: true,
-    // Whether function 'FC_ActMenu_Mod' in 'debug.dat' can be called by pressing SHIFT and the button to open ARCUS menu.
+    // Whether function 'FC_ActMenu_Mod' in 'debug.dat' can be called by pressing SHIFT and the button to open ARCUS menu (default key R).
     isHookActMenu: true,
     // Whether to output debug info to command prompt and the level.
     // 0 for no info.
     // 1 for most info (recommended).
-    // 2 for less info but more accurate strings (useful is 1 is not good).
+    // 2 for less info but more accurate strings (useful if 1 is not good).
     // 3 is for the string formats only.
     isOutputDebugInfo: 1,
     // First parameter is whether to enable changing the version string on the title screen.
