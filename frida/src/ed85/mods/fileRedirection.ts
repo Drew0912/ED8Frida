@@ -35,6 +35,7 @@ export function fileRedirection() {
         'pointer', ['pointer', 'pointer'],
     );
 
+    // Unnecessary hook.
     // const fopen = Interceptor2.jmp(
     //     API.crt.fopen,
     //     function(path: NativePointer, mode: NativePointer): NativePointer {

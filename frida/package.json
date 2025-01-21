@@ -1,7 +1,7 @@
 {
-  "name": "ed83",
+  "name": "ed8frida",
   "version": "1.0.0",
-  "description": "",
+  "description": "Frida script for ED8 (Specifically Reverie) to do various exe modifications.",
   "private": true,
   "main": "src/main.ts",
   "scripts": {
@@ -13,13 +13,13 @@
     "postbuild": ""
   },
   "devDependencies": {
-    "@types/frida-gum": "^17.3.0",
-    "@types/node": "^17.0.8",
+    "@types/frida-gum": "^18.7.2",
+    "@types/node": "^17.0.45",
     "frida-compile": "^10.2.5"
   },
   "dependencies": {
-    "@types/sprintf-js": "^1.1.2",
-    "json5": "^2.2.0",
-    "sprintf-js": "^1.1.2"
+    "@types/sprintf-js": "^1.1.4",
+    "json5": "^2.2.3",
+    "sprintf-js": "^1.1.3"
   }
 }
