@@ -35,18 +35,18 @@ export function fileRedirection() {
         'pointer', ['pointer', 'pointer'],
     );
 
-    const fopen = Interceptor2.jmp(
-        API.crt.fopen,
-        function(path: NativePointer, mode: NativePointer): NativePointer {
-            const patch = utils.getPatchFile(path.readUtf16String()!);
-            if (patch) {
-                path = Memory.allocUtf16String(patch);
-            }
+    // const fopen = Interceptor2.jmp(
+    //     API.crt.fopen,
+    //     function(path: NativePointer, mode: NativePointer): NativePointer {
+    //         const patch = utils.getPatchFile(path.readUtf16String()!);
+    //         if (patch) {
+    //             path = Memory.allocUtf16String(patch);
+    //         }
 
-            return fopen(path, mode);
-        },
-        'pointer', ['pointer', 'pointer'],
-    );
+    //         return fopen(path, mode);
+    //     },
+    //     'pointer', ['pointer', 'pointer'],
+    // );
 
     // Adding this fixes audio files from other folders not working. Still needs crt.wfopen to be intercepted.
     const File_GetSize = Interceptor2.jmp(
