@@ -319,7 +319,7 @@ int StartFrida() {
     return 1;
 }
 
-int main() {
+int main2() {
     if (DEBUGCONSOLE) {
         AllocConsole();
         FILE* new_stdout;
@@ -330,6 +330,10 @@ int main() {
     HANDLE HackThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)StartFrida, NULL, 0, &threadId);
 
     return 1;
+}
+
+int main() {
+    QueueUserAPC((PAPCFUNC)main2, GetCurrentThread(), NULL);
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule,

@@ -21,23 +21,27 @@ export function main() {
             utils.setPatchDirs(dirs);
     }
 
-    if (ED85.getConfig().isOpenCommandPrompt)
-        API.WIN32.AllocConsole();
-    utils.log("Reverie Frida script loaded.");
-    // Add setting UseSigScan here.
+    // Add setting UseSigScan here. Race condition with FridaLoader very possible with exe code being executed before frida.
 
     if (ED85.getConfig().isFileRedirection)
         fileRedirection();
     if (ED85.getConfig().isLoadDebug)
         loadDebug();
+
+    if (ED85.getConfig().isOpenCommandPrompt)
+        API.WIN32.AllocConsole();
+    outputDebugInfo(ED85.getConfig().isOutputDebugInfo);
+
     if (ED85.getConfig().isHookActMenu)
         hookActMenu();
-    outputDebugInfo(ED85.getConfig().isOutputDebugInfo);
     if (ED85.getConfig().isChangeTitleVerString[0])
         changeTitleVerString(ED85.getConfig().isChangeTitleVerString[1], ED85.getConfig().isChangeTitleVerString[2]);
     if (ED85.getConfig().isAddToWindowText)
         addToWindowText();
     hookScriptExtender();
+
+    utils.log("Reverie Frida script loaded.");
+    
     // test();
 
 }
