@@ -33,7 +33,7 @@ export function loadDebug() {
     );
 }
 
-export function hookActMenu() {
+export function hookActMenu(func: string) {
     const handleActMenu = Interceptor2.jmp(
         Addrs.ED85.HandleActMenu,
         function(arg1: NativePointer, arg2: number): number {
@@ -43,7 +43,7 @@ export function hookActMenu() {
                 return handleActMenu(arg1, arg2);
             }
 
-            ScriptManager.getScriptByID(ScriptId.Debug)?.call(ED85.scriptManager.getThreadContext(), 'FC_ActMenu_MOD', 0, 1);
+            ScriptManager.getScriptByID(ScriptId.Debug)?.call(ED85.scriptManager.getThreadContext(), func, 0, 1);
 
             return 0;
         },

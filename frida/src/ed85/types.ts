@@ -34,7 +34,7 @@ export interface IConfig {
     isOpenCommandPrompt : boolean,
     isFileRedirection : boolean,
     isLoadDebug : boolean,
-    isHookActMenu : boolean,
+    isHookActMenu : [boolean, string]
     isOutputDebugInfo : number,
     isChangeTitleVerString : [boolean, string, boolean],
     isAddToWindowText : boolean,
@@ -45,7 +45,7 @@ let defaultConfig: IConfig = {
     isOpenCommandPrompt: false,
     isFileRedirection : false,
     isLoadDebug : false,
-    isHookActMenu : false,
+    isHookActMenu : [false, 'FC_ActMenu_MOD'],
     isOutputDebugInfo : 0,
     isChangeTitleVerString : [true, 'ED8Frida - No config file found', true],
     isAddToWindowText : true,

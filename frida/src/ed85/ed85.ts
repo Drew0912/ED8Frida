@@ -32,8 +32,8 @@ export function main() {
         API.WIN32.AllocConsole();
     outputDebugInfo(ED85.getConfig().isOutputDebugInfo);
 
-    if (ED85.getConfig().isHookActMenu)
-        hookActMenu();
+    if (ED85.getConfig().isHookActMenu[0])
+        hookActMenu(ED85.getConfig().isHookActMenu[1]);
     if (ED85.getConfig().isChangeTitleVerString[0])
         changeTitleVerString(ED85.getConfig().isChangeTitleVerString[1], ED85.getConfig().isChangeTitleVerString[2]);
     if (ED85.getConfig().isAddToWindowText)
@@ -41,7 +41,7 @@ export function main() {
     hookScriptExtender();
 
     utils.log("Reverie Frida script loaded.");
-    
+
     // test();
 
 }

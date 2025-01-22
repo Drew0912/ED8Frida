@@ -8,20 +8,28 @@
         'data/',
     ],
     isSetPatchDirs: true,
+
     // Whether command prompt is opened. All output info from frida (not FridaLoader) is sent to cmd.
     isOpenCommandPrompt: true,
+
     // Whether file redirection is used or not using patchDirs. Recommended to use Senpatcher instead.
     isFileRedirection: true,
+
     // Whether 'debug.dat' is loaded and usable/callable in game. Requires 'face.dat' to be put into 'debug.dat'. 
     isLoadDebug: true,
-    // Whether function 'FC_ActMenu_Mod' in 'debug.dat' can be called by pressing SHIFT and the button to open ARCUS menu (default key R).
-    isHookActMenu: true,
+
+    // Whether function 'FC_ActMenu_MOD' in 'debug.dat' can be called by pressing SHIFT and the button to open ARCUS menu (default key R).
+    // 'FC_ActMenu_MOD' is custom debug menu in provided 'debug.dat' (recommended).
+    // Other possible functions/menus are 'SelectArea', 'SelectFlag_System'. (not tested).
+    isHookActMenu: [true, 'FC_ActMenu_MOD'],
+
     // Whether to output debug info to command prompt and the level.
     // 0 for no info.
     // 1 for most info (recommended).
     // 2 for less info but more accurate strings (useful if 1 is not good).
     // 3 is for the string formats only.
     isOutputDebugInfo: 1,
+
     // First parameter is whether to enable changing the version string on the title screen.
     // Second parameter is the custom string to use.
     // Third parameter is to keep the version number in the string.
@@ -30,6 +38,7 @@
         'ED8Frida',
         true,
     ],
+
     // Whether to add the text "Frida Enabled" to the game window title.
     isAddToWindowText: true,
 }
