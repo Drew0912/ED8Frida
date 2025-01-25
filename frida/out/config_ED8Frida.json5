@@ -41,4 +41,9 @@
 
     // Whether to add the text "Frida Enabled" to the game window title.
     isAddToWindowText: true,
+
+    // Whether info on what and when opcodes are being executed from scripts is outputted to command prompt.
+    // Requires isOpenCommandPrompt: true.
+    // Can be changed in game using custom debug menu.
+    isOpcodeTracing: false,
 }

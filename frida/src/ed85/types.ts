@@ -2,7 +2,7 @@ import * as json5 from "json5"
 import * as path from "path"
 import { Modules } from "../modules";
 import { Addrs, Offsets} from "./addrs";
-import { ED8BaseObject, ED8Vector, Interceptor2, isPathExists} from "../utils";
+import { ED8BaseObject, isPathExists} from "../utils";
 import * as utils from "../utils";
 
 
@@ -28,7 +28,7 @@ export enum ScriptId {
     BtlScript           = 0x1C,
 }
 
-export interface IConfig {
+interface IConfig {
     patchDirs : string[],
     isSetPatchDirs : boolean,
     isOpenCommandPrompt : boolean,
@@ -38,6 +38,7 @@ export interface IConfig {
     isOutputDebugInfo : number,
     isChangeTitleVerString : [boolean, string, boolean],
     isAddToWindowText : boolean,
+    isOpcodeTracing: boolean,
 }
 let defaultConfig: IConfig = {
     patchDirs : ['data/'],
@@ -49,6 +50,7 @@ let defaultConfig: IConfig = {
     isOutputDebugInfo : 0,
     isChangeTitleVerString : [true, 'ED8Frida - No config file found', true],
     isAddToWindowText : true,
+    isOpcodeTracing : false,
 }
 
 export class Script extends ED8BaseObject {
@@ -187,21 +189,7 @@ export class ED85 extends ED8BaseObject {
     }
     
     static enemySBreak(enemyNumber: number) {
-        // 0x100 contains all BattleCharWork, 0x110 contains all player BattleCharWork
-        for (let i = 7; i > 0; i--) {
-            const BattleCharWork100 = ED85.battleProc.allBattleCharWork.add(i*8).readPointer();
-            const BattleCharWork110 = ED85.battleProc.onlyPlayerBattleCharWork.add(i*8).readPointer();
-            if (BattleCharWork100.equals(BattleCharWork110)) {
-                ED85.playerSBreakFunction(ED85.battleProc.SBreakParam1, ED85.battleProc.allBattleCharWork.add((i+enemyNumber)*8).readPointer(), 1, 0, 0);
-                // last param is position in sbreak queue?, param3 is sbreak logo, 1 means yes.
-                // utils.log(Addrs.ED85.SharedInstance.readPointer().add(Offsets.ED85.ScriptManager).readPointer().add(0x6cb70).readPointer().add(0x21C).readPointer().readU32().toString());
-    
-                // Below Works
-                // const testBtlChr = new BattleCharacter(Addrs.ED85.SharedInstance.readPointer().add(Offsets.ED85.ScriptManager).readPointer().add(0x6cb70).readPointer().add(0x100).readPointer().add((i+enemyNum)*8).readPointer());
-                // utils.log("SBreak Char Name: " + testBtlChr.character.name);
-                break;
-            }
-        }
+        ED85.playerSBreakFunction(ED85.battleProc.SBreakParam1, BattleProc.battleCharWorkForEnemyNumber(enemyNumber), 1, 0, 0);
     }
 }
 
@@ -215,9 +203,23 @@ export class BattleProc extends ED8BaseObject {
         return this.readPointer(Offsets.BattleProc.onlyPlayerBattleCharWork);
     }
 
-    // Pointer used in ED85.playerSBreakFunction.
-    // May be useful for other things.
+    // Gets pointer for the first parameter used in ED85.playerSBreakFunction. May be useful for other things.
     get SBreakParam1(): NativePointer {
         return this.readPointer(Offsets.BattleProc.SBreakParam1);
+    }
+
+    static battleCharWorkForEnemyNumber(enemyNumber: number): NativePointer {
+        let value = 0;
+        for (let i = 7; i > 0; i--) {
+            // 0x100 contains all BattleCharWork, 0x110 contains all player BattleCharWork
+            const BattleCharWork100 = ED85.battleProc.allBattleCharWork.add(i*8).readPointer();
+            const BattleCharWork110 = ED85.battleProc.onlyPlayerBattleCharWork.add(i*8).readPointer();
+            if (BattleCharWork100.equals(BattleCharWork110)) {
+                value = i;
+                break
+            }
+        }
+        return ED85.battleProc.allBattleCharWork.add((value+enemyNumber)*8).readPointer();
+        
     }
 }

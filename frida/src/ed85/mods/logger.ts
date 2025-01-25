@@ -9,7 +9,10 @@ enum LoggerLevel {
     StringFormatOnly = 3,
 }
 
-export let loggerLevel = LoggerLevel.NoInfo;
+let loggerLevel = LoggerLevel.NoInfo;
+export function setLoggerLevel(value: number) {
+    loggerLevel = value;
+}
 
 // Param1 = level, Param2 = format, Param3... = ...args.
 function hookLoggerPrintf() {

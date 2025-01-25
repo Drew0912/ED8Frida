@@ -7,13 +7,14 @@ import { outputDebugInfo } from "./mods/logger";
 import { addToWindowText, changeTitleVerString } from "./mods/changeInfoString";
 import { fileRedirection } from "./mods/fileRedirection";
 import { hookActMenu, loadDebug } from "./mods/debugScript";
-import { hookScriptExtender } from "./mods/scriptExtender";
+import { hookScriptExtender, setTracing } from "./mods/scriptExtender";
 
 function test() {
     
 }
 
 export function main() {
+    loadDebug();
     // Config stuff
     if (ED85.getConfig().isSetPatchDirs) {
         const dirs = ED85.getConfig().patchDirs;
@@ -25,12 +26,14 @@ export function main() {
 
     if (ED85.getConfig().isFileRedirection)
         fileRedirection();
-    if (ED85.getConfig().isLoadDebug)
-        loadDebug();
+    // if (ED85.getConfig().isLoadDebug)
+    //     loadDebug();
 
     if (ED85.getConfig().isOpenCommandPrompt)
         API.WIN32.AllocConsole();
     outputDebugInfo(ED85.getConfig().isOutputDebugInfo);
+    if (ED85.getConfig().isOpcodeTracing)
+        setTracing(ED85.getConfig().isOpcodeTracing);
 
     if (ED85.getConfig().isHookActMenu[0])
         hookActMenu(ED85.getConfig().isHookActMenu[1]);

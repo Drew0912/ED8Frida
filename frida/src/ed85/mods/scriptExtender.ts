@@ -1,14 +1,21 @@
-import { Addrs, Offsets } from "../addrs";
+import { Addrs } from "../addrs";
 import { Interceptor2 } from "../../utils";
 import { ED85 } from "../types";
 import * as utils from "../../utils";
 
+import { setLoggerLevel } from "./logger";
+
 let tracing = false;
+export function setTracing(bool : boolean) {
+    tracing = bool;
+}
 
 export function hookScriptExtender() {
     const ScriptExtender = Interceptor2.jmp(
         Addrs.Script.ScriptInterpreter,
         function(ScriptScn : NativePointer, Script : NativePointer, Opcode : number) : number {
+            // ScriptScn is the same as Script Class (at least for debug).
+            // i.e ScriptScn == ED85.scriptManager.debug.pointer
             const opcodeInScriptOffset = (Script.add(0x78)).readU32();
             const scriptInMemory = (Script.add(0x70)).readPointer()!;
 
@@ -20,9 +27,10 @@ export function hookScriptExtender() {
 
             if (Opcode == 0xF1) { // Map instruction Call2(OP_F1) to DebugLog(OP_07).
                 const stringInF1 = scriptInMemory.add(opcodeInScriptOffset + 7).readAnsiString()!; // DebugString hex representation -> 07 (** ** ** FF) 02 DD STRING.
-                if (stringInF1.slice(0, 6) == 'SBreak')
+                if (stringInF1.slice(0, 6) == 'SBreak'){
                     SBreak(stringInF1);
-                else {
+                }            
+                else if (stringInF1.slice(0, 6) == 'opcode') {
                     switch(stringInF1) {
                         case 'opcodeTracingOn': {
                             tracing = true;
@@ -33,6 +41,29 @@ export function hookScriptExtender() {
                             break;
                         }
                     }
+                }
+                else if (stringInF1.slice(0, 15) == 'OutputDebugInfo') {
+                    switch(stringInF1) {
+                        case 'OutputDebugInfo0': {
+                            setLoggerLevel(0);
+                            break;
+                        }
+                        case 'OutputDebugInfo1': {
+                            setLoggerLevel(1);
+                            break;
+                        }
+                        case 'OutputDebugInfo2': {
+                            setLoggerLevel(2);
+                            break;
+                        }
+                        case 'OutputDebugInfo3': {
+                            setLoggerLevel(3);
+                            break;
+                        }
+                    }
+                }
+                else {
+                    utils.log(`ScriptExtender: Unknown string (${stringInF1})`);
                 }
                 return ScriptExtender(ScriptScn, Script, 7); 
             }
