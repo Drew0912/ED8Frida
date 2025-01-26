@@ -57,6 +57,11 @@ export const Addrs = (function() {
                     // InitScripts   : Modules.ED85.base.add(0x2CB5F0), //v1.0.8
                     // InitED8Script : Modules.ED85.base.add(0x10D410), //v1.0.8
                 },
+
+                AbnormalStatus: {
+                    BossFlagCheck : Modules.ED85.base.add(0x1226E2),
+                    SetTurnsToOne : Modules.ED85.base.add(0x12271A),
+                },
             };
         case 'ed85_v114':
             return {
@@ -97,6 +102,11 @@ export const Addrs = (function() {
                     // InitScripts   : Modules.ED85.base.add(0x2CB5F0), //v1.0.8
                     // InitED8Script : Modules.ED85.base.add(0x10D410), //v1.0.8
                 },
+
+                AbnormalStatus: {
+                    BossFlagCheck : Modules.ED85.base.add(0x122BC2),
+                    SetTurnsToOne : Modules.ED85.base.add(0x122BFA),
+                },
             };
     }
 })();
@@ -135,6 +145,10 @@ export const Offsets = (function() {
             onlyPlayerBattleCharWork : 0x110,
 
             SBreakParam1 : 0x8188,
+        },
+
+        BattleCharacter : {
+            Flags : 0x420,
         },
     };
 })();

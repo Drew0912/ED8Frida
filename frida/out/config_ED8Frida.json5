@@ -46,4 +46,9 @@
     // Requires isOpenCommandPrompt: true.
     // Can be changed in game using custom debug menu.
     isOpcodeTracing: false,
+
+    // Change turn duration of abnormal statuses on monsters with the boss flag.
+    // Only have one of the below set to true.
+    isDisableAbnormalStatusLimitWithBossFlag: false,
+    isAbnormalStatusLimitWithBossFlagSub1: true,
 }

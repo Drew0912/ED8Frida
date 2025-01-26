@@ -8,6 +8,7 @@ import { addToWindowText, changeTitleVerString } from "./mods/changeInfoString";
 import { fileRedirection } from "./mods/fileRedirection";
 import { hookActMenu, loadDebug } from "./mods/debugScript";
 import { hookScriptExtender, setTracing } from "./mods/scriptExtender";
+import { abnormalStatusLimitWithBossFlagSub1, disableAbnormalStatusLimitWithBossFlag } from "./mods/abnormalStatusBossFlag";
 
 function test() {
     
@@ -15,12 +16,20 @@ function test() {
 
 export function main() {
     loadDebug();
+    const patchDirs = [
+        'Higher/',
+        'Drew0912/',
+        'mod/',
+        'patch/',
+        'data/',
+    ];
+    utils.setPatchDirs(patchDirs)
     // Config stuff
-    if (ED85.getConfig().isSetPatchDirs) {
-        const dirs = ED85.getConfig().patchDirs;
-        if (dirs)
-            utils.setPatchDirs(dirs);
-    }
+    // if (ED85.getConfig().isSetPatchDirs) {
+    //     const dirs = ED85.getConfig().patchDirs;
+    //     if (dirs)
+    //         utils.setPatchDirs(dirs);
+    // }
 
     // Add setting UseSigScan here. Race condition with FridaLoader very possible with exe code being executed before frida.
 
@@ -42,6 +51,11 @@ export function main() {
     if (ED85.getConfig().isAddToWindowText)
         addToWindowText();
     hookScriptExtender();
+
+    if (ED85.getConfig().isDisableAbnormalStatusLimitWithBossFlag)
+        disableAbnormalStatusLimitWithBossFlag();
+    if (ED85.getConfig().isAbnormalStatusLimitWithBossFlagSub1)
+        abnormalStatusLimitWithBossFlagSub1();
 
     utils.log("Reverie Frida script loaded.");
 

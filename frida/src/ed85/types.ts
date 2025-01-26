@@ -39,6 +39,8 @@ interface IConfig {
     isChangeTitleVerString : [boolean, string, boolean],
     isAddToWindowText : boolean,
     isOpcodeTracing: boolean,
+    isDisableAbnormalStatusLimitWithBossFlag: boolean,
+    isAbnormalStatusLimitWithBossFlagSub1: boolean,
 }
 let defaultConfig: IConfig = {
     patchDirs : ['data/'],
@@ -51,6 +53,8 @@ let defaultConfig: IConfig = {
     isChangeTitleVerString : [true, 'ED8Frida - No config file found', true],
     isAddToWindowText : true,
     isOpcodeTracing : false,
+    isDisableAbnormalStatusLimitWithBossFlag: false,
+    isAbnormalStatusLimitWithBossFlagSub1: false,
 }
 
 export class Script extends ED8BaseObject {

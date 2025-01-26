@@ -40,6 +40,9 @@ Note that only Windows 10 has been tested. Frida has had some issues with Window
 - Opcode tracing for scena scripts.
     - ![OpcodeTraceElie.png](imgs/OpcodeTraceElie.png)
     - Can be toggled using custom debug menu through SE.
+- Change behaviour of abnormal status effects turn duration for enemies with the boss flag
+    - Remove turn duration limit,
+    - Or have the turn duration be 1 lower than normal.
 
 # Installation
 
