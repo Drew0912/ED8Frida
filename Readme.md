@@ -1,10 +1,9 @@
 # ED8 Frida
 Original work done by [Ouroboros](https://github.com/Ouroboros) and taken from https://github.com/Ouroboros/Falcom/tree/master/ED8/ed83. Extended to support and add features to Trails into Reverie. Refer to [frida/READMEOuroboros.md](frida/READMEOuroboros.md) for original information, not in English.
 
-Frida [script](https://github.com/Drew0912/ED8Frida/tree/main/frida) and [loader](https://github.com/Drew0912/ED8Frida/tree/main/FridaLoader) for The Legend of Hereos: Trails into Reverie to do exe based modifications. 
-(TODO) Also includes code `debug_hook.py` to be used with a modified `Decompiler2` to obtain the required `debug.dat`.
+Frida [script](https://github.com/Drew0912/ED8Frida/tree/main/frida) and [loader](https://github.com/Drew0912/ED8Frida/tree/main/FridaLoader) for The Legend of Hereos: Trails into Reverie to do exe based modifications. This is mostly for a WIP Reverie difficulty mod but some of its features may be useful for other cases.
 
-This is mostly for a WIP Reverie difficulty mod but some of its features may be useful for other cases.
+(TODO) Also includes code `debug_hook.py` to be used with a modified `Decompiler2` to obtain a modified `debug.dat` required for many of ED8Frida's features.
 
 ## Supported games
 - Trails of Cold Steel 3 Chinese Version
