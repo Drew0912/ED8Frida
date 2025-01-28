@@ -61,6 +61,11 @@ export const Addrs = (function() {
                 AbnormalStatus: {
                     BossFlagCheck : Modules.ED85.base.add(0x1226E2),
                     SetTurnsToOne : Modules.ED85.base.add(0x12271A),
+
+                    InsightEVAValue : Modules.ED85.base.add(0x12ECA2),
+                    InsightACCValue : Modules.ED85.base.add(0x12EC97),
+                    BlindEVAValue : Modules.ED85.base.add(0x12ECB7),
+                    BlindACCValue : Modules.ED85.base.add(0x12ECAE),
                 },
             };
         case 'ed85_v114':
@@ -106,6 +111,11 @@ export const Addrs = (function() {
                 AbnormalStatus: {
                     BossFlagCheck : Modules.ED85.base.add(0x122BC2),
                     SetTurnsToOne : Modules.ED85.base.add(0x122BFA),
+
+                    InsightEVAValue : Modules.ED85.base.add(0x12F592),
+                    InsightACCValue : Modules.ED85.base.add(0x12F587),
+                    BlindEVAValue : Modules.ED85.base.add(0x12F5A7),
+                    BlindACCValue : Modules.ED85.base.add(0x12F59E),
                 },
             };
     }

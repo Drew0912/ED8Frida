@@ -51,4 +51,12 @@
     // Only have one of the below set to true.
     isDisableAbnormalStatusLimitWithBossFlag: false,
     isAbnormalStatusLimitWithBossFlagSub1: true,
+
+    // Control EVA and ACC values for Insight and Blind abnormal status.
+    // First parameter is whether to patch or not, second is value (signed 8bit).
+    patchInsightEVA: [true, 20],
+    patchInsightACC: [true, 100],
+    // Blind untested
+    patchBlindEVA: [false, 100],
+    patchBlindACC: [false, 200],
 }

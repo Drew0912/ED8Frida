@@ -4,5 +4,5 @@ cd/d "%~dp0"
 call D:\Dev\nodejs\nodevars.bat
 
 :loop
-npm run watch%1
+npm run build%1
 goto:loop

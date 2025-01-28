@@ -41,6 +41,10 @@ interface IConfig {
     isOpcodeTracing: boolean,
     isDisableAbnormalStatusLimitWithBossFlag: boolean,
     isAbnormalStatusLimitWithBossFlagSub1: boolean,
+    patchInsightEVA : [boolean, number],
+    patchInsightACC : [boolean, number],
+    patchBlindEVA : [boolean, number],
+    patchBlindACC : [boolean, number],
 }
 let defaultConfig: IConfig = {
     patchDirs : ['data/'],
@@ -55,6 +59,10 @@ let defaultConfig: IConfig = {
     isOpcodeTracing : false,
     isDisableAbnormalStatusLimitWithBossFlag: false,
     isAbnormalStatusLimitWithBossFlagSub1: false,
+    patchInsightEVA : [false, 50],
+    patchInsightACC : [false, 50],
+    patchBlindEVA : [false, 50],
+    patchBlindACC : [false, 50],
 }
 
 export class Script extends ED8BaseObject {

@@ -9,6 +9,7 @@ import { fileRedirection } from "./mods/fileRedirection";
 import { hookActMenu, loadDebug } from "./mods/debugScript";
 import { hookScriptExtender, setTracing } from "./mods/scriptExtender";
 import { abnormalStatusLimitWithBossFlagSub1, disableAbnormalStatusLimitWithBossFlag } from "./mods/abnormalStatusBossFlag";
+import { patchInsightEVA, patchInsightACC, patchBlindEVA, patchBlindACC } from "./mods/insightChange";
 
 function test() {
     
@@ -56,6 +57,16 @@ export function main() {
         disableAbnormalStatusLimitWithBossFlag();
     if (ED85.getConfig().isAbnormalStatusLimitWithBossFlagSub1)
         abnormalStatusLimitWithBossFlagSub1();
+
+
+    if (ED85.getConfig().patchInsightEVA[0])
+        patchInsightEVA(ED85.getConfig().patchInsightEVA[1])
+    if (ED85.getConfig().patchInsightACC[0])
+        patchInsightACC(ED85.getConfig().patchInsightACC[1])
+    if (ED85.getConfig().patchBlindEVA[0])
+        patchBlindEVA(ED85.getConfig().patchBlindEVA[1])
+    if (ED85.getConfig().patchBlindACC[0])
+        patchBlindACC(ED85.getConfig().patchBlindACC[1])
 
     utils.log("Reverie Frida script loaded.");
 

@@ -42,6 +42,7 @@ Note that only Windows 10 has been tested. Frida has had some issues with Window
 - Change behaviour of abnormal status effects turn duration for enemies with the boss flag
     - Remove turn duration limit,
     - Or have the turn duration be 1 lower than normal.
+- Modify values of EVA and ACC gained/lost for Insight/Blind abnormal statuses.
 
 # Installation
 
