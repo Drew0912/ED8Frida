@@ -29,10 +29,10 @@ export enum ScriptId {
 }
 
 interface IConfig {
+    isFileRedirection : boolean,
     patchDirs : string[],
     isSetPatchDirs : boolean,
     isOpenCommandPrompt : boolean,
-    isFileRedirection : boolean,
     isLoadDebug : boolean,
     isHookActMenu : [boolean, string]
     isOutputDebugInfo : number,
@@ -48,11 +48,11 @@ interface IConfig {
     isBODurationDownOnEnemyTurn : boolean,
 }
 let defaultConfig: IConfig = {
+    isFileRedirection : false,
     patchDirs : ['data/'],
     isSetPatchDirs : false,
     isOpenCommandPrompt: false,
-    isFileRedirection : false,
-    isLoadDebug : false,
+    isLoadDebug : true,
     isHookActMenu : [false, 'FC_ActMenu_MOD'],
     isOutputDebugInfo : 0,
     isChangeTitleVerString : [true, 'ED8Frida - No config file found', true],

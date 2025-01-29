@@ -3,7 +3,7 @@ Original work done by [Ouroboros](https://github.com/Ouroboros) and taken from h
 
 Frida [script](https://github.com/Drew0912/ED8Frida/tree/main/frida) and [loader](https://github.com/Drew0912/ED8Frida/tree/main/FridaLoader) for The Legend of Hereos: Trails into Reverie to do exe based modifications. This is mostly for a WIP Reverie difficulty mod but some of its features may be useful for other cases.
 
-(TODO) Also includes code `debug_hook.py` to be used with a modified `Decompiler2` to obtain a modified `debug.dat` required for many of ED8Frida's features.
+(TODO) Also includes code `debug_hook.py` to be used with a modified `Decompiler2` (not available) to obtain a modified `debug.dat` required for many of ED8Frida's features.
 
 ## Supported games
 - Trails of Cold Steel 3 Chinese Version
@@ -47,6 +47,8 @@ Note that only Windows 10 has been tested. Frida has had some issues with Window
     - Can also modify the remaining turns (or display value only) through SE.
 
 # Installation
+
+Download and extract the `.7z` file from releases to obtain four files, `config_ED8Frida.json5`, `d3d11.dll`, `debug.dat` and `hnk.js`. Moves these files to `bin/Win64` where `hnk.exe` is. Adjust config in `config_ED8Frida.json5` to change behaviour if needed.
 
 # Credits
 - ed83 Frida (both script and loader) by [Ouroboros](https://github.com/Ouroboros)

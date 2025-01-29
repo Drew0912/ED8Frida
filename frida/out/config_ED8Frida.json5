@@ -1,5 +1,10 @@
 {
-    // directories for mod loading, priority top to bottom. 'isSetPatchDirs' has to be true.
+    // Whether file redirection is used or not using patchDirs. Recommended to use Senpatcher instead.
+    isFileRedirection: false,
+
+    // Directories for mod loading/file redirection ('isFileRedirection has to be true'), priority top to bottom.
+    // 'isSetPatchDirs' has to be true.
+    // Currently changing this does nothing, always false.
     patchDirs: [
         'Higher/',
         'Drew0912/',
@@ -7,15 +12,14 @@
         'patch/',
         'data/',
     ],
-    isSetPatchDirs: true,
+    isSetPatchDirs: false,
 
     // Whether command prompt is opened. All output info from frida (not FridaLoader) is sent to cmd.
+    // Do not close command prompt or the game will also close.
     isOpenCommandPrompt: true,
 
-    // Whether file redirection is used or not using patchDirs. Recommended to use Senpatcher instead.
-    isFileRedirection: true,
-
     // Whether 'debug.dat' is loaded and usable/callable in game. Requires 'face.dat' to be put into 'debug.dat'. 
+    // Currently changing this does nothing, always true.
     isLoadDebug: true,
 
     // Whether function 'FC_ActMenu_MOD' in 'debug.dat' can be called by pressing SHIFT and the button to open ARCUS menu (default key R).
@@ -50,16 +54,16 @@
     // Change turn duration of abnormal statuses on monsters with the boss flag.
     // Only have one of the below set to true.
     isDisableAbnormalStatusLimitWithBossFlag: false,
-    isAbnormalStatusLimitWithBossFlagSub1: true,
+    isAbnormalStatusLimitWithBossFlagSub1: false,
 
     // Control EVA and ACC values for Insight and Blind abnormal status.
     // First parameter is whether to patch or not, second is value (signed 8bit).
-    patchInsightEVA: [true, 20],
-    patchInsightACC: [true, 100],
+    patchInsightEVA: [false, 20],
+    patchInsightACC: [false, 100],
     // Blind untested
     patchBlindEVA: [false, 100],
     patchBlindACC: [false, 200],
 
     // Whether the current brave order turn duration goes down on enemy turns.
-    isBODurationDownOnEnemyTurn: true,
+    isBODurationDownOnEnemyTurn: false,
 }
