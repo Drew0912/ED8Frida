@@ -62,6 +62,9 @@ export function hookScriptExtender() {
                         }
                     }
                 }
+                else if (stringInF1 == 'TestSE') {
+                    utils.log("TestSE");
+                }
                 else {
                     utils.log(`ScriptExtender: Unknown string (${stringInF1})`);
                 }

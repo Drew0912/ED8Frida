@@ -67,6 +67,8 @@ export const Addrs = (function() {
                     BlindEVAValue : Modules.ED85.base.add(0x12ECB7),
                     BlindACCValue : Modules.ED85.base.add(0x12ECAE),
                 },
+
+                BODurationDownOnEnemyTurn : Modules.ED85.base.add(0x0E1968),
             };
         case 'ed85_v114':
             return {
@@ -117,6 +119,8 @@ export const Addrs = (function() {
                     BlindEVAValue : Modules.ED85.base.add(0x12F5A7),
                     BlindACCValue : Modules.ED85.base.add(0x12F59E),
                 },
+
+                BODurationDownOnEnemyTurn : Modules.ED85.base.add(0x0E1488),
             };
     }
 })();
@@ -130,6 +134,7 @@ export const Offsets = (function() {
         ScriptManager : {
             ThreadContext : 0x190B8,
             SizeOfThreadContext : 0x870,
+            
             BattleProc : 0x6CB70,
 
             Scripts: { //param_1 + Offset

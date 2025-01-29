@@ -59,4 +59,7 @@
     // Blind untested
     patchBlindEVA: [false, 100],
     patchBlindACC: [false, 200],
+
+    // Whether the current brave order turn duration goes down on enemy turns.
+    isBODurationDownOnEnemyTurn: true,
 }

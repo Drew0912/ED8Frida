@@ -45,6 +45,7 @@ interface IConfig {
     patchInsightACC : [boolean, number],
     patchBlindEVA : [boolean, number],
     patchBlindACC : [boolean, number],
+    isBODurationDownOnEnemyTurn : boolean,
 }
 let defaultConfig: IConfig = {
     patchDirs : ['data/'],
@@ -63,6 +64,7 @@ let defaultConfig: IConfig = {
     patchInsightACC : [false, 50],
     patchBlindEVA : [false, 50],
     patchBlindACC : [false, 50],
+    isBODurationDownOnEnemyTurn : false,
 }
 
 export class Script extends ED8BaseObject {
@@ -216,6 +218,8 @@ export class BattleProc extends ED8BaseObject {
     }
 
     // Gets pointer for the first parameter used in ED85.playerSBreakFunction. May be useful for other things.
+    // ED85.battleProc.SBreakParam1.add(0x358) (braveOrderDurationDownOnEnemyTurn)
+    // Offsets.BattleProc.SBreakParam1 == 0x8188
     get SBreakParam1(): NativePointer {
         return this.readPointer(Offsets.BattleProc.SBreakParam1);
     }
@@ -233,5 +237,21 @@ export class BattleProc extends ED8BaseObject {
         }
         return ED85.battleProc.allBattleCharWork.add((value+enemyNumber)*8).readPointer();
         
+    }
+
+    get braveOrderDurationCount(): number {
+        return this.readPointer(0x8268).add(0x44).readU8();
+    }
+
+    set braveOrderDurationCount(value: number) {
+        this.readPointer(0x8268).add(0x44).writeU8(value);
+    }
+
+    get braveOrderDurationCountDisplayOnly(): number {
+        return this.readPointer(0x8268).add(0x45).readU8();
+    }
+
+    set braveOrderDurationCountDisplayOnly(value: number) {
+        this.readPointer(0x8268).add(0x45).writeU8(value);
     }
 }

@@ -10,6 +10,7 @@ import { hookActMenu, loadDebug } from "./mods/debugScript";
 import { hookScriptExtender, setTracing } from "./mods/scriptExtender";
 import { abnormalStatusLimitWithBossFlagSub1, disableAbnormalStatusLimitWithBossFlag } from "./mods/abnormalStatusBossFlag";
 import { patchInsightEVA, patchInsightACC, patchBlindEVA, patchBlindACC } from "./mods/insightChange";
+import { braveOrderDownOnEnemy } from "./mods/braveOrderDurationDownOnEnemyTurn";
 
 function test() {
     
@@ -67,6 +68,8 @@ export function main() {
         patchBlindEVA(ED85.getConfig().patchBlindEVA[1])
     if (ED85.getConfig().patchBlindACC[0])
         patchBlindACC(ED85.getConfig().patchBlindACC[1])
+    if (ED85.getConfig().isBODurationDownOnEnemyTurn)
+        braveOrderDownOnEnemy();
 
     utils.log("Reverie Frida script loaded.");
 

@@ -43,6 +43,8 @@ Note that only Windows 10 has been tested. Frida has had some issues with Window
     - Remove turn duration limit,
     - Or have the turn duration be 1 lower than normal.
 - Modify values of EVA and ACC gained/lost for Insight/Blind abnormal statuses.
+- Enable patch so that the remaining turns on the currently active brave order also goes down on enemy turns.
+    - Can also modify the remaining turns (or display value only) through SE.
 
 # Installation
 
