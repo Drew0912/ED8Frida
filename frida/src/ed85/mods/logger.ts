@@ -93,26 +93,26 @@ function hookLoggerPrintf() {
                         }
                     }
                     switch(format.charCodeAt(count)) { // Unknown characters.
-                        case 9484://0xE2 UTF8
-                            s = s.concat('|');
-                            count = count + 1;
-                            break;
+                        // case 9484://0xE2 UTF8
+                        //     s = s.concat('|');
+                        //     count = count + 1;
+                        //     break;
                         case 65372: //i.e MasterQuartz(Sophia)
                             s = s.concat('|');
                             count = count + 1;
                             break;
-                        case 9492: //i.e -----------
-                            s = s.concat("-");
-                            count = count + 1;
-                            break;
+                        // case 9492: //i.e -----------
+                        //     s = s.concat("-");
+                        //     count = count + 1;
+                        //     break;
                         // case 9474: //i.e 30:Elie AT:1 (Doesn't work)
                         //     s = s.concat("|");
                         //     count = count + 1;
                         //     break;
-                        case 12295: //i.e createBattleCharacter
-                            s = s.concat('|');
-                            count = count + 1;
-                            break;
+                        // case 12295: //i.e createBattleCharacter
+                        //     s = s.concat('|');
+                        //     count = count + 1;
+                        //     break;
                     }
                     s = s.concat(format.charAt(count)); 
                     count++;
