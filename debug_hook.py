@@ -940,6 +940,7 @@ def DiffModMenu(menuVar):
         menuVar,
         1,
         ('Clear BattleFlags (not needed)', ClearFlagsFunc),
+        ('ResetItemUsageLimitFlag (should not be needed)', lambda: Call(ScriptId.BtlSys, 'ResetItemCountUsageLimit')),
         fontSize = 33.0,
     )
 
@@ -1408,35 +1409,39 @@ def AniBtlEnemySBreak():
 
 # Enough CP and seal may cause issues, no sbreak flag?
 # Rean may have some issues due to being chrId 0?
+# Checking turn may not work due to S-Break exe code causing turn to change. 
+# May also be due to chained S-Break charcter order change caused be exe. New function to do SBreak_Enemy_BattleTurn_End?
+# Scena Flags may be wrong?
 def SBreak_Enemy_Core(PsuedoChrIdIn, ScenaFlagIn):
     # ScenaFlag True when chr is SBreaking, False otherwise.
     endLabel = genLabel()
-    cpMetLabel = genLabel()
+    enoughCPToSBreakLabel = genLabel()
     scenaFlagResetAndEndLabel = genLabel()
 
     If( # Check CP value of chr and compare to Param3.
         (
-            (Expr.Eval, "BattleGetChrStatus(" + str(PsuedoChrIdIn)+ ", 0x16)"), #Check CP value.
+            (Expr.Eval, f"BattleGetChrStatus({str(PsuedoChrIdIn)}, 0x16)"), #Check CP value.
             (Expr.Expr25, 0x2),
             Expr.Lss,
             Expr.Return,
         ),
-        cpMetLabel,
+        enoughCPToSBreakLabel,
     )
     # Below code is for not enough CP.
 
     If( # Check if character of current turn is equal to chrId.
         (
             (Expr.Eval, "BattleCmd(0x5C, 0x02)"), # Get chrId of character turn.
-            (Expr.Eval, "BattleGetChrStatus(" + str(PsuedoChrIdIn)+ ", 0x06)"), #Get chrId of PsuedoChrId.
+            (Expr.Eval, f"BattleGetChrStatus({str(PsuedoChrIdIn)}, 0x06)"), #Get chrId of PsuedoChrId.
             Expr.Equ,
             Expr.Return,
         ),
         endLabel,
     )
+
     # Double check this? Should not need this as Can't Move should only be set if needed but no harm in having it.
     # Situation is always clear Can't Move and then set it if needed.
-    BattleClearChrAbnormalStatus2(PsuedoChrIdIn, 0x00001000) #Clear can't move if own turn and not enough CP.
+    BattleClearChrAbnormalStatus2(PsuedoChrIdIn, 0x00001000) # Clear can't move if own turn and not enough CP.
     If( # Check if chr is currently SBreaking.
         (
             (Expr.TestScenaFlags, ScenaFlagIn),
@@ -1444,11 +1449,11 @@ def SBreak_Enemy_Core(PsuedoChrIdIn, ScenaFlagIn):
         ),
         scenaFlagResetAndEndLabel,
     )
-    BattleSetChrAbnormalStatus2(PsuedoChrIdIn, 0x00001000, 0x000003E8, 0x00000001, 0x00) #Set can't move AbnormalStatus to SBREAK FAILED as enemy is sbreaking but not enough CP.
+    BattleSetChrAbnormalStatus2(PsuedoChrIdIn, 0x00001000, 0x000003E8, 0x00000001, 0x00) #Set can't move AbnormalStatus to SBREAK FAILED as enemy is sbreaking (and is own turn) but not enough CP.
     Jump(scenaFlagResetAndEndLabel)
 
     #Enough CP for ENEMY_SBREAK
-    label(cpMetLabel)
+    label(enoughCPToSBreakLabel)
 
     #Split for if SBreaking or not.
     splitIfSBreaking = genLabel()
@@ -1460,11 +1465,12 @@ def SBreak_Enemy_Core(PsuedoChrIdIn, ScenaFlagIn):
         splitIfSBreaking,
     )
 
+    # State: S-Breaking
     skipIfNotSealLabel = genLabel()
     # No check if own turn? Add this check. Do not need?
     If(
         (
-            (Expr.Eval, "BattleGetChrAbnormalStatus(" + str(PsuedoChrIdIn)+ ")"), #Check if seal. Check if guard break check is needed.
+            (Expr.Eval, f"BattleGetChrAbnormalStatus({str(PsuedoChrIdIn)})"), # Check if chr is sealed. Check if check for guard break is needed.
             (Expr.PushLong, 0x2),
             Expr.And,
             Expr.Return,
@@ -1476,66 +1482,57 @@ def SBreak_Enemy_Core(PsuedoChrIdIn, ScenaFlagIn):
     If( # Check if character of current turn is equal to chrId.
         (
             (Expr.Eval, "BattleCmd(0x5C, 0x02)"), # Get chrId of character turn.
-            (Expr.Eval, "BattleGetChrStatus(" + str(PsuedoChrIdIn)+ ", 0x06)"), #Get chrId of PsuedoChrId.
-            Expr.Equ,
-            Expr.Return,
-        ),
-        endLabel, # Should be fine set as endLabel?
-    )
-    # Do not need to set CP to 180 as no S-Craft.
-    Jump(scenaFlagResetAndEndLabel)
-
-    label(skipIfNotSealLabel)
-    # State: Not S-Breaking.
-    BattleClearChrAbnormalStatus2(PsuedoChrIdIn, 0x00001000) #Clear Can't move. Default state.
-
-    # Not currently SBreaking
-    label(splitIfSBreaking)
-    # Check for AbnormalStatuses and skip S-Break call if needed.
-    If(
-        (
-            (Expr.Eval, "BattleGetChrAbnormalStatus(" + str(PsuedoChrIdIn)+ ")"),
-            (Expr.PushLong, 0x800057D2), #Skip SBreak if AbnormalStatus(Death, Vanish, Nightmare, Charm, Confuse, Faint, Petrify, Freeze, Sleep, Seal). Check what possess is?
-            Expr.And,
-            Expr.Ez,
-            Expr.Return,
-        ),
-        scenaFlagResetAndEndLabel, #Change to normal endLabel
-    )
-    If(
-        (
-            (Expr.Eval, "BattleGetChrAbnormalStatus2(" + str(PsuedoChrIdIn) + ")"),
-            (Expr.PushLong, 0x10010), #Skip SBreak if AbnormalStatus2(Hide, GuardBreak). Add Berserk_Rean, can't move?
-            Expr.And,
-            Expr.Ez,
-            Expr.Return,
-        ),
-        scenaFlagResetAndEndLabel, #Change to normal endLabel
-    )
-
-    # Check ScenaFlag for S-Breaking. If True, check if current turn and set CP to allow S-Craft.
-    skipIfNotSBreaking = genLabel()
-    If(
-        (
-            (Expr.TestScenaFlags, ScenaFlagIn),
-            Expr.Return,
-        ),
-        skipIfNotSBreaking,
-    )
-    If(
-        (
-            (Expr.Eval, "BattleCmd(0x5C, 0x02)"),
-            (Expr.Eval, "BattleGetChrStatus(" + str(PsuedoChrIdIn) + ", 0x06)"), #Check if chr turn.
+            (Expr.Eval, f"BattleGetChrStatus({str(PsuedoChrIdIn)}, 0x06)"), #Get chrId of PsuedoChrId.
             Expr.Equ,
             Expr.Return,
         ),
         endLabel,
     )
-    BattleSetChrStatus(PsuedoChrIdIn, 0x16, ParamInt(0x00B4)) #Set CP to 180 to SCraft, already SBreaked.
+    # Do not need to set CP to 180 as no S-Craft.
     Jump(scenaFlagResetAndEndLabel)
 
-    #Additional requirements to S-Break:
-    label(skipIfNotSBreaking)
+    label(skipIfNotSealLabel)
+
+    # State: S-Breaking, need to set CP to allow S-Craft. No other checks (additonal requirements) needed?
+    If(
+        (
+            (Expr.Eval, "BattleCmd(0x5C, 0x02)"),
+            (Expr.Eval, f"BattleGetChrStatus({str(PsuedoChrIdIn)}, 0x06)"), # Check if chr turn.
+            Expr.Equ,
+            Expr.Return,
+        ),
+        endLabel,
+    )
+    BattleSetChrStatus(PsuedoChrIdIn, ChangeUnitChrStatus.CP, ParamInt(0x00B4)) # Set CP to 180 to S-Craft, already S-Breaked.
+    Jump(scenaFlagResetAndEndLabel)
+
+    # State: Not S-Breaking.
+    label(splitIfSBreaking)
+    BattleClearChrAbnormalStatus2(PsuedoChrIdIn, 0x00001000) #Clear Can't move. Default state.
+
+    # Check for AbnormalStatuses and skip S-Break call if needed.
+    If(
+        (
+            (Expr.Eval, f"BattleGetChrAbnormalStatus({str(PsuedoChrIdIn)})"),
+            (Expr.PushLong, 0x800057D2), #Skip S-Break if AbnormalStatus(Death, Vanish, Nightmare, Charm, Confuse, Faint, Petrify, Freeze, Sleep, Seal). Check what possess is?
+            Expr.And,
+            Expr.Ez,
+            Expr.Return,
+        ),
+        scenaFlagResetAndEndLabel, #Change to normal endLabel
+    )
+    If(
+        (
+            (Expr.Eval, f"BattleGetChrAbnormalStatus2({str(PsuedoChrIdIn)})"),
+            (Expr.PushLong, 0x10010), #Skip S-Break if AbnormalStatus2(Hide, GuardBreak). Add Berserk_Rean, can't move?
+            Expr.And,
+            Expr.Ez,
+            Expr.Return,
+        ),
+        scenaFlagResetAndEndLabel, #Change to normal endLabel
+    )
+
+    # Additional requirements to S-Break:
     skipIfChrTurn = genLabel()
     If(
         (
@@ -1549,11 +1546,11 @@ def SBreak_Enemy_Core(PsuedoChrIdIn, ScenaFlagIn):
     If(
         (
             (Expr.Eval, "BattleCmd(0x5C, 0x02)"),
-            (Expr.Eval, "BattleGetChrStatus(" + str(PsuedoChrIdIn) + ", 0x06)"), #Check if chr turn.
+            (Expr.Eval, f"BattleGetChrStatus({str(PsuedoChrIdIn)}, 0x06)"), #Check if chr turn.
             Expr.Neq,
             Expr.Return,
         ),
-        endLabel, #Update to include ScenaFlagReset. No reason to.
+        endLabel, # Update to include ScenaFlagReset. No reason to.
     )
 
     label(skipIfChrTurn)
@@ -1571,7 +1568,7 @@ def SBreak_Enemy_Core(PsuedoChrIdIn, ScenaFlagIn):
         If(
             (
                 (Expr.Eval, "BattleCmd(0x5C, 0x02)"),
-                (Expr.Eval, "BattleGetChrStatus("+ str(chrId) +", 0x06)"), #Check if enemy turn.
+                (Expr.Eval, f"BattleGetChrStatus({str(chrId)}, 0x06)"), #Check if enemy turn.
                 Expr.Neq,
                 Expr.Return,
             ),
@@ -1591,7 +1588,7 @@ def SBreak_Enemy_Core(PsuedoChrIdIn, ScenaFlagIn):
     )
     If(
         (
-            (Expr.Eval, "BattleGetChrAbnormalStatus2(" + str(PsuedoChrIdIn)+ ")"), #Check if enhanced.
+            (Expr.Eval, f"BattleGetChrAbnormalStatus2({str(PsuedoChrIdIn)})"), #Check if enhanced.
             (Expr.PushLong, 0x40),
             Expr.And,
             Expr.Neg,
@@ -1657,13 +1654,13 @@ def SBreak_Enemy_Core(PsuedoChrIdIn, ScenaFlagIn):
     If(
         (
             (Expr.Eval, "BattleCmd(0x5C, 0x02)"),
-            (Expr.Eval, "BattleGetChrStatus(" + str(PsuedoChrIdIn) + ", 0x06)"), #Check if chr turn.
+            (Expr.Eval, f"BattleGetChrStatus({str(PsuedoChrIdIn)}, 0x06)"), #Check if chr turn.
             Expr.Equ,
             Expr.Return,
         ),
         setScenaFlagAndEndLabel,
     )
-    BattleSetChrStatus(PsuedoChrIdIn, 0x16, ParamInt(0x00B4)) # Set CP to 180 to allow S-Craft from ai file.
+    BattleSetChrStatus(PsuedoChrIdIn, ChangeUnitChrStatus.CP, ParamInt(0x00B4)) # Set CP to 180 to allow S-Craft from ai file.
     Sleep(500) # Time between SBreak_Enemy_Camera and S-Craft ani.
 
     label(setScenaFlagAndEndLabel)
@@ -1741,7 +1738,7 @@ def SBreak_Enemy_Finish():
         skipLabel = genLabel()
         If(
             (
-                (Expr.Eval, "FormationCmd(0x0C, PseudoChrId.Self, " + str(chrId) +")"), #Check if chr turn.
+                (Expr.Eval, f"FormationCmd(0x0C, PseudoChrId.Self, {str(chrId)})"), #Check if chr turn.
                 Expr.Return,
             ),
             skipLabel,
@@ -1753,17 +1750,17 @@ def SBreak_Enemy_Finish():
 
     Return()
 
-# Put in all battle files with enemy S-Breaks.
+# Put in all battle files with enemy S-Breaks above calls to SBreak_Enemy.
 def SBreak_Enemy_Maintain():
-    # Limit Enemy CP for Enemy SBreak probability system.
+    # Limit Enemy CP for Enemy S-Break probability.
     for chrId in [0xF043, 0xF044, 0xF045, 0xF046, 0xF047, 0xF048, 0xF049, 0xF04A]:
         skipLabel = genLabel()
         # If no ScenaFlag to say enemy is SBreaking.
         If(
             (
                 (Expr.TestScenaFlags, (chrId - 0xD043)),
-                Expr.Ez, #Invert above check? (not suppose to be Expr.Ez?)
-                (Expr.Eval, "BattleGetChrStatus(" + str(chrId) + ", 0x16)"),
+                Expr.Ez,
+                (Expr.Eval, f"BattleGetChrStatus({str(chrId)}, 0x16)"),
                 (Expr.PushLong, 0xB4), #180
                 Expr.Geq,
                 Expr.And,
@@ -1798,7 +1795,7 @@ def SBreak_Enemy_CP_Output():
             skipLabel = genLabel()
             If(
                 (
-                    (Expr.Eval, "BattleGetChrStatus(" + str(chrId) + ", 0x16)"),
+                    (Expr.Eval, f"BattleGetChrStatus({str(chrId)}, 0x16)"),
                     (Expr.PushLong, i),
                     Expr.Equ,
                     Expr.Return,

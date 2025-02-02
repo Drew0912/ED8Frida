@@ -203,7 +203,7 @@ export class ED85 extends ED8BaseObject {
     }
     
     static enemySBreak(enemyNumber: number) {
-        ED85.playerSBreakFunction(ED85.battleProc.SBreakParam1, BattleProc.battleCharWorkForEnemyNumber(enemyNumber), 1, 0, 0);
+        ED85.playerSBreakFunction(ED85.battleProc.SBreakParam1, BattleProc.getBattleCharWorkForEnemyNumber(enemyNumber), 1, 0, 0);
     }
 }
 
@@ -224,18 +224,19 @@ export class BattleProc extends ED8BaseObject {
         return this.readPointer(Offsets.BattleProc.SBreakParam1);
     }
 
-    static battleCharWorkForEnemyNumber(enemyNumber: number): NativePointer {
+    static getBattleCharWorkForEnemyNumber(enemyNumber: number): NativePointer {
         let value = 0;
-        for (let i = 7; i > 0; i--) {
-            // 0x100 contains all BattleCharWork, 0x110 contains all player BattleCharWork
+        for (let i = 0; i < 8; i++) {
+            // 0x100 contains all BattleCharWork, 0x110 contains only player BattleCharWork
             const BattleCharWork100 = ED85.battleProc.allBattleCharWork.add(i*8).readPointer();
             const BattleCharWork110 = ED85.battleProc.onlyPlayerBattleCharWork.add(i*8).readPointer();
-            if (BattleCharWork100.equals(BattleCharWork110)) {
+            if (!BattleCharWork100.equals(BattleCharWork110)) {
                 value = i;
                 break
             }
         }
-        return ED85.battleProc.allBattleCharWork.add((value+enemyNumber)*8).readPointer();
+        // utils.log("getBattleCharWorkForEnemyNumber: Should be number of party members: %s", value);
+        return ED85.battleProc.allBattleCharWork.add((value+enemyNumber-1)*8).readPointer();
         
     }
 
