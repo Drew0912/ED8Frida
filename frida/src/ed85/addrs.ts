@@ -156,8 +156,11 @@ export const Offsets = (function() {
         },
 
         BattleProc : {
+            PartOfTurnCounter: 0x68,
             allBattleCharWork : 0x100,
             onlyPlayerBattleCharWork : 0x110,
+
+            BattleScriptName : 0x31C,
 
             SBreakParam1 : 0x8188,
         },

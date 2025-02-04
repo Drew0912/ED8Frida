@@ -1,6 +1,6 @@
 import { Addrs } from "../addrs";
 import { Interceptor2 } from "../../utils";
-import { ED85 } from "../types";
+import { BattleProc, ED85 } from "../types";
 import * as utils from "../../utils";
 
 import { setLoggerLevel } from "./logger";
@@ -64,6 +64,10 @@ export function hookScriptExtender() {
                 }
                 else if (stringInF1 == 'TestSE') {
                     utils.log("TestSE");
+                }
+                else if (stringInF1 == "TurnCounterEnemy") {
+                    // Make it so that enemy turns do not increase this value.
+                    ED85.battleProc.numberOfTurnsPassedInBattle--;
                 }
                 else {
                     utils.log(`ScriptExtender: Unknown string (${stringInF1})`);

@@ -255,4 +255,20 @@ export class BattleProc extends ED8BaseObject {
     set braveOrderDurationCountDisplayOnly(value: number) {
         this.readPointer(0x8268).add(0x45).writeU8(value);
     }
+
+    // Not tested
+    get battleScriptName(): string {
+        return this.readPointer(Offsets.BattleProc.BattleScriptName).readAnsiString()!;
+    }
+
+    // This value is used for action count in RP condition fights,
+    // (Expr.Eval, 'BattleCmd(0x5C, 0x00)') gets this number
+    // Offset 0x68
+    get numberOfTurnsPassedInBattle(): number {
+        return this.readPointer(Offsets.BattleProc.PartOfTurnCounter).add(0x39C).readU32();
+    }
+
+    set numberOfTurnsPassedInBattle(value: number) {
+        this.readPointer(Offsets.BattleProc.PartOfTurnCounter).add(0x39C).writeU32(value);
+    }
 }
