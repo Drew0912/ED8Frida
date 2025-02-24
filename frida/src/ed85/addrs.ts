@@ -69,6 +69,10 @@ export const Addrs = (function() {
                 },
 
                 BODurationDownOnEnemyTurn : Modules.ED85.base.add(0x0E1968),
+
+                VFTable: {
+                    BattleCharWork : Modules.ED85.base.add(0xC20260),
+                },
             };
         case 'ed85_v114':
             return {
@@ -121,6 +125,10 @@ export const Addrs = (function() {
                 },
 
                 BODurationDownOnEnemyTurn : Modules.ED85.base.add(0x0E1488),
+
+                VFTable: {
+                    BattleCharWork : Modules.ED85.base.add(0xC290C0),
+                },
             };
     }
 })();
@@ -156,7 +164,12 @@ export const Offsets = (function() {
         },
 
         BattleProc : {
-            PartOfTurnCounter: 0x68,
+            // Maybe something
+            FieldMapMaybe : 0x28,
+            BattleViewMaybe : 0x50,
+            BattleTableMaybe : 0x60,
+
+            PartOfTurnCounter: 0x68, // BattleResultManager
             allBattleCharWork : 0x100,
             onlyPlayerBattleCharWork : 0x110,
 
@@ -165,8 +178,39 @@ export const Offsets = (function() {
             SBreakParam1 : 0x8188,
         },
 
-        BattleCharacter : {
+        BattleCharacter : { // BattleCharWork
+            BattleProc : 0x10,
+            Character : 0x18, // CharWork
+
+            // t_mons stuff, some cannot be dynamically changed
+            PoisonEfficacy : 0xD8,
+            // ..., Next is Elemental Efficacy
+            EarthEfficacy : 0xF0, //???
+
             Flags : 0x420,
+            // Test below
+            CurrentHP : 0x424,
+            MaxHP : 0x428,
+            CurrentEP : 0x42A,
+            MaxEP : 0x42C,
+            CurrentCP : 0x430,
+            MaxCP : 0x432,
+
+            STR : 0x434,
+            DEF : 0x438,
+            ATS : 0x43C,
+            ADF : 0x440,
+            SPD : 0x448,
+            MOV : 0x44A,
+
+            CurrentBreak : 0x454,
+            MaxBreak : 0x458,
+
+            EXP : 0x460,
+            LVL : 0x464,
+            SomethingLikeLvl : 0x468,
+
+            SomeChrIdMaybe : 0x50A,
         },
     };
 })();

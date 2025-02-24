@@ -203,7 +203,10 @@ export class ED85 extends ED8BaseObject {
     }
     
     static enemySBreak(enemyNumber: number) {
-        ED85.playerSBreakFunction(ED85.battleProc.SBreakParam1, BattleProc.getBattleCharWorkForEnemyNumber(enemyNumber), 1, 0, 0);
+        // utils.log(BattleProc.getBattleCharWorkForEnemyNumber(enemyNumber).add(Offsets.BattleCharacter.CurrentHP).readU32().toString()); // Test: Gets Current HP
+        const battleCharWork = BattleProc.getBattleCharWorkForEnemyNumber(enemyNumber);
+        if (battleCharWork) {ED85.playerSBreakFunction(ED85.battleProc.SBreakParam1, battleCharWork, 1, 0, 0);}
+        // ED85.playerSBreakFunction(ED85.battleProc.SBreakParam1, BattleProc.getBattleCharWorkForEnemyNumber(enemyNumber), 1, 0, 0);
     }
 }
 
@@ -224,8 +227,9 @@ export class BattleProc extends ED8BaseObject {
         return this.readPointer(Offsets.BattleProc.SBreakParam1);
     }
 
-    static getBattleCharWorkForEnemyNumber(enemyNumber: number): NativePointer {
-        let value = 0;
+    static getBattleCharWorkForEnemyNumber(enemyNumber: number): NativePointer | undefined {
+        let value = -1;
+        // Getting BattleCharacter index of last present party member.
         for (let i = 0; i < 8; i++) {
             // 0x100 contains all BattleCharWork, 0x110 contains only player BattleCharWork
             const BattleCharWork100 = ED85.battleProc.allBattleCharWork.add(i*8).readPointer();
@@ -235,8 +239,15 @@ export class BattleProc extends ED8BaseObject {
                 break
             }
         }
+        if (value == -1) { return undefined } // No party members? Not possible.
         // utils.log("getBattleCharWorkForEnemyNumber: Should be number of party members: %s", value);
-        return ED85.battleProc.allBattleCharWork.add((value+enemyNumber-1)*8).readPointer();
+
+        // Checks if the found BattleCharacter actually is a BattleCharacter struct.
+        // Should only not clear if SBreaking for an enemy PseudoChrId not present in battle.
+        if (ED85.battleProc.allBattleCharWork.add((value+enemyNumber-1)*8).readPointer().readPointer().equals(Addrs.VFTable.BattleCharWork)) {
+            return ED85.battleProc.allBattleCharWork.add((value+enemyNumber-1)*8).readPointer();
+        }
+        return undefined;
         
     }
 
