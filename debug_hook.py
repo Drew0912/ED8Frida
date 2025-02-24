@@ -898,7 +898,7 @@ def ChangeModelMenu(menuVar):
     FormationCmd(0x1B, 0x01)
     FormationCmd(0x1C, 0x01)
 
-def testFunc():
+def testFunc2():
         
     ReplaceBGM(101, 2050) #works
     # ReplaceBGM(125, 2050) #Does not work
@@ -920,6 +920,8 @@ def testFunc():
     OP_25(0x01)
     OP_23(0x05, 65535, 65535, 65535, 65535, 0x00)
 
+def testFunc():
+    AddItem(0x00, 0x0080, 9)
 
 def ClearFlagsFunc():
     BattleClearFlags(0x00000020) #Clear no BO
@@ -941,6 +943,7 @@ def DiffModMenu(menuVar):
         1,
         ('Clear BattleFlags (not needed)', ClearFlagsFunc),
         ('ResetItemUsageLimitFlag (should not be needed)', lambda: Call(ScriptId.BtlSys, 'ResetItemCountUsageLimit')),
+        ('Add item "Debug: Kill Target"', wrapper(AddItem, 0x0, 0x0080, 9)),
         fontSize = 33.0,
     )
 
@@ -1504,7 +1507,7 @@ def SBreak_Enemy_Core(PsuedoChrIdIn, ScenaFlagIn):
         endLabel,
     )
     BattleSetChrStatus(PsuedoChrIdIn, ChangeUnitChrStatus.CP, ParamInt(0x00B4)) # Set CP to 180 to S-Craft, already S-Breaked.
-    Jump(scenaFlagResetAndEndLabel)
+    Jump(endLabel) # endLabel as SBreak_Enemy_Finish clears the ScenaFlag.
 
     # State: Not S-Breaking.
     label(splitIfSBreaking)
@@ -1565,6 +1568,18 @@ def SBreak_Enemy_Core(PsuedoChrIdIn, ScenaFlagIn):
         skipIfEnemyTurn,
     )
     for chrId in [0xF043, 0xF044, 0xF045, 0xF046, 0xF047, 0xF048, 0xF049, 0xF04A]:
+        continueLabel = genLabel()
+        # Check if chrId exists, stops Rean being detected.
+        If(
+            (
+                (Expr.Eval, f'BattleGetChrStatus({chrId}, 0x14)'), # HP
+                (Expr.PushLong, 0x0),
+                Expr.Gtr,
+                Expr.Return,
+            ),
+            continueLabel,
+        )
+
         If(
             (
                 (Expr.Eval, "BattleCmd(0x5C, 0x02)"),
@@ -1574,6 +1589,7 @@ def SBreak_Enemy_Core(PsuedoChrIdIn, ScenaFlagIn):
             ),
             endLabel, #Update to include ScenaFlagReset.
         )
+        label(continueLabel)
 
     label(skipIfEnemyTurn)
     checkEnhanceLabel = genLabel()
@@ -1622,7 +1638,7 @@ def SBreak_Enemy_Core(PsuedoChrIdIn, ScenaFlagIn):
 
     # BattleCmd(0xAE, PsuedoChrIdIn) #SBreak. Does not work in Reverie.
 
-    Call2SE('SBreak' + hex(PsuedoChrIdIn))
+    Call2SE(f'SBreak: {hex(PsuedoChrIdIn)}')
     # SBreak sound.
     OP_3B(0x00, ParamInt(0x8B7C), ParamFloat(1), ParamInt(0), 0.0, ParamFloat(0), 0x0000, 0xFFFF, 0.0, 0.0, 0.0, ParamFloat(0), '', ParamInt(0), ParamInt(0), 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0.0)
 
@@ -1667,7 +1683,7 @@ def SBreak_Enemy_Core(PsuedoChrIdIn, ScenaFlagIn):
     SetScenaFlags(ScenaFlagIn)
     Jump(endLabel)
 
-    label(scenaFlagResetAndEndLabel)
+    label(scenaFlagResetAndEndLabel) # Update label to say that this case is no S-Craft, ScenaFlag is cleared from SBreak_Enemy_Finish.
     ClearScenaFlags(ScenaFlagIn)
 
     label(endLabel)
@@ -1892,20 +1908,20 @@ def SBreak_Enemy_Effect():
 # Other
 
 def OpenCampMenu():
-    ExecExpressionWithVar(
-        0xF6,
-        (
-            (Expr.PushLong, 0xFFFFFFFF),
-            Expr.Nop,
-            Expr.Return,
-        ),
-    )
+    # ExecExpressionWithVar(
+    #     0xF6,
+    #     (
+    #         (Expr.PushLong, 0xFFFFFFFF),
+    #         Expr.Nop,
+    #         Expr.Return,
+    #     ),
+    # )
     MenuCmd(0x03, 0)
     # OP_90('current', 0x0000002D)
-    OP_94(0x00, 0x11019400)
+    OP_94(0x00, 0x11019400) # Open Menu?
 
-    # OP_25(0x01)
-    # Sleep(300)
+    OP_25(0x01)
+    Sleep(300)
     Return()
 
 

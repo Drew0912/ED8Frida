@@ -152,7 +152,7 @@ export class ED85 extends ED8BaseObject {
     private static _sharedInstance: ED85;
     private static _config: IConfig;
 
-    private static playerSBreakFunction = new NativeFunction(Addrs.ED85.PlayerSBreak, 'uint16', ['pointer', 'pointer', 'bool', 'uint32', 'uint16']);
+    private static _SBreak = new NativeFunction(Addrs.ED85.PlayerSBreak, 'uint16', ['pointer', 'pointer', 'bool', 'uint32', 'uint16']);
 
     static get sharedInstance(): ED85 {
         if (this._sharedInstance)
@@ -202,11 +202,22 @@ export class ED85 extends ED8BaseObject {
         return this.scriptManager.battleProc;
     }
     
-    static enemySBreak(enemyNumber: number) {
-        // utils.log(BattleProc.getBattleCharWorkForEnemyNumber(enemyNumber).add(Offsets.BattleCharacter.CurrentHP).readU32().toString()); // Test: Gets Current HP
-        const battleCharWork = BattleProc.getBattleCharWorkForEnemyNumber(enemyNumber);
-        if (battleCharWork) {ED85.playerSBreakFunction(ED85.battleProc.SBreakParam1, battleCharWork, 1, 0, 0);}
-        // ED85.playerSBreakFunction(ED85.battleProc.SBreakParam1, BattleProc.getBattleCharWorkForEnemyNumber(enemyNumber), 1, 0, 0);
+    static SBreak(pseudoChrId: number) {
+        const battleCharWork = function() {
+            if (pseudoChrId >= 0xF043 && pseudoChrId <= 0xF04A) {
+                const res = BattleProc.getBattleCharWorkForEnemyNumber(pseudoChrId);
+                return res;
+            }
+            // This does not work for player pseudoChrId as it does not automatically use S-Craft.
+            // else if (pseudoChrId >= 0xF020 && pseudoChrId <= 0xF027) {
+            //     // const res = BattleProc.getBattleCharWorkForEnemyNumber(pseudoChrId);
+            //     // return res;
+            // }
+        }();
+
+        if (battleCharWork) {
+            ED85._SBreak(ED85.battleProc.SBreakParam1, battleCharWork.pointer, 1, 0, 0);
+        }
     }
 }
 
@@ -227,7 +238,7 @@ export class BattleProc extends ED8BaseObject {
         return this.readPointer(Offsets.BattleProc.SBreakParam1);
     }
 
-    static getBattleCharWorkForEnemyNumber(enemyNumber: number): NativePointer | undefined {
+    static getBattleCharWorkForEnemyNumber(pseudoChrId: number): BattleCharacter | undefined {
         let value = -1;
         // Getting BattleCharacter index of last present party member.
         for (let i = 0; i < 8; i++) {
@@ -244,8 +255,9 @@ export class BattleProc extends ED8BaseObject {
 
         // Checks if the found BattleCharacter actually is a BattleCharacter struct.
         // Should only not clear if SBreaking for an enemy PseudoChrId not present in battle.
-        if (ED85.battleProc.allBattleCharWork.add((value+enemyNumber-1)*8).readPointer().readPointer().equals(Addrs.VFTable.BattleCharWork)) {
-            return ED85.battleProc.allBattleCharWork.add((value+enemyNumber-1)*8).readPointer();
+        const SBreakSelf = new BattleCharacter(ED85.battleProc.allBattleCharWork.add((value+pseudoChrId-0xF043)*8).readPointer());
+        if (SBreakSelf.isValid()) {
+            return SBreakSelf;
         }
         return undefined;
         
@@ -281,5 +293,15 @@ export class BattleProc extends ED8BaseObject {
 
     set numberOfTurnsPassedInBattle(value: number) {
         this.readPointer(Offsets.BattleProc.PartOfTurnCounter).add(0x39C).writeU32(value);
+    }
+}
+
+export class BattleCharacter extends ED8BaseObject {
+    isValid(): boolean {
+        return this.readPointer(0).equals(Addrs.VFTable.BattleCharWork);
+    }
+
+    get CurrentHP(): number {
+        return this.readU32(Offsets.BattleCharacter.CurrentHP);
     }
 }

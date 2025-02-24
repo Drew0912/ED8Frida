@@ -27,8 +27,9 @@ export function hookScriptExtender() {
 
             if (Opcode == 0xF1) { // Map instruction Call2(OP_F1) to DebugLog(OP_07).
                 const stringInF1 = scriptInMemory.add(opcodeInScriptOffset + 7).readAnsiString()!; // DebugString hex representation -> 07 (** ** ** FF) 02 DD STRING.
+                utils.log(`    Call2SE(${stringInF1})`);
                 if (stringInF1.slice(0, 6) == 'SBreak'){
-                    SBreak(stringInF1);
+                    ED85.SBreak(parseInt(stringInF1.slice(7)));
                 }            
                 else if (stringInF1.slice(0, 6) == 'opcode') {
                     switch(stringInF1) {
@@ -110,41 +111,4 @@ export function hookScriptExtender() {
     //     // utils.log(`    OP_%02X @ ${scriptName}.${currentFunction}`, opcode);
     // });
 
-}
-
-function SBreak(str: string){
-    switch(str) {
-        case 'SBreak0xf043': {
-            ED85.enemySBreak(1);
-            break;
-        }
-        case 'SBreak0xf044': {
-            ED85.enemySBreak(2);
-            break;
-        }
-        case 'SBreak0xf045': {
-            ED85.enemySBreak(3);
-            break;
-        }
-        case 'SBreak0xf046': {
-            ED85.enemySBreak(4);
-            break;
-        }
-        case 'SBreak0xf047': {
-            ED85.enemySBreak(5);
-            break;
-        }
-        case 'SBreak0xf048': {
-            ED85.enemySBreak(6);
-            break;
-        }
-        case 'SBreak0xf049': {
-            ED85.enemySBreak(7);
-            break;
-        }
-        case 'SBreak0xf04A': {
-            ED85.enemySBreak(8);
-            break;
-        }
-    }
 }
