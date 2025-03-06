@@ -301,7 +301,40 @@ export class BattleCharacter extends ED8BaseObject {
         return this.readPointer(0).equals(Addrs.VFTable.BattleCharWork);
     }
 
-    get CurrentHP(): number {
+    get character(): Character {
+        return new Character(this.readPointer(Offsets.BattleCharacter.Character));
+    }
+
+    // Values that can be edited live in battle.
+    get currentHP(): number {
         return this.readU32(Offsets.BattleCharacter.CurrentHP);
+    }
+
+    set currentHP(value: number) {
+        this.writeU32(Offsets.BattleCharacter.CurrentHP, value);
+    }
+
+    get currentCP(): number {
+        return this.readU16(Offsets.BattleCharacter.CurrentCP);
+    }
+
+    set currentCP(value: number) {
+        this.writeU16(Offsets.BattleCharacter.CurrentCP, value);
+    }
+
+    // Values from t_mons, not used live in battle.
+    get name(): string {
+        return this.readPointer(Offsets.BattleCharacter.Name).readAnsiString()!;
+    }
+
+}
+
+class Character extends ED8BaseObject {
+    get name(): string {
+        return this.readUtf8String(Offsets.Character.Name)!;
+    }
+
+    set name(str: string) {
+        this.writeUtf8String(Offsets.Character.Name, str);
     }
 }

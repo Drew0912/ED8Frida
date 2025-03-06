@@ -182,6 +182,8 @@ export const Offsets = (function() {
             BattleProc : 0x10,
             Character : 0x18, // CharWork
 
+            Name : 0xC8, // Pointer to string. Cannot be dynamically edited.
+
             // t_mons stuff, some cannot be dynamically changed
             PoisonEfficacy : 0xD8,
             // ..., Next is Elemental Efficacy
@@ -212,5 +214,9 @@ export const Offsets = (function() {
 
             SomeChrIdMaybe : 0x50A,
         },
+
+        Character : {
+            Name : 0x860, // Can edit dynamically.
+        }
     };
 })();
