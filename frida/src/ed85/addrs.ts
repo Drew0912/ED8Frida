@@ -182,15 +182,126 @@ export const Offsets = (function() {
             BattleProc : 0x10,
             Character : 0x18, // CharWork
 
+            // t_mons.tbl
+            AlgoFileName : 0x20,
+            ModelName : 0x28,
+            AniName : 0x30,
+            ModelScale : 0x38,
+            CameraPivotHeight : 0x3C,
+
+            float1 : 0x40,
+            float2 : 0x44,
+            float3 : 0x48,
+            float4 : 0x4C,
+            float5 : 0x50,
+            short6 : 0x54,
+            short7 : 0x56,
+
+            HPBase : 0x58,
+            HPMultiplier : 0x5C,
+            EPMax : 0x60,
+            EPInit : 0x62,
+            CPMax : 0x64,
+            CPInit : 0x66,
+            STRBase : 0x68,
+            STRMultiplier : 0x6C,
+            DEFBase : 0x70,
+            DEFMultiplier : 0x74,
+            ATSBase: 0x78,
+            ATSMultiplier : 0x7C,
+            ADFBase : 0x80,
+            ADFMultiplier : 0x84,
+            DEXBase : 0x88,
+            DEXMultiplier : 0x8C,
+            AGLBase : 0x90,
+            AGLMultiplier : 0x94,
+            EVABase : 0x98,
+            SPDBase : 0x9A,
+            SPDMultiplier: 0x9C,
+            MOVBase : 0xA0,
+            MOVMultiplier : 0xA4,
+            EXPBase : 0xA8,
+            EXPMultiplier : 0xAC,
+            BreakBase : 0xB0,
+            BreakMultiplier : 0xB4,
+
             Name : 0xC8, // Pointer to string. Cannot be dynamically edited.
+            Description : 0xD0,
 
-            // t_mons stuff, some cannot be dynamically changed
+            // From t_mons.tbl, can be changed?
             PoisonEfficacy : 0xD8,
-            // ..., Next is Elemental Efficacy
-            EarthEfficacy : 0xF0, //???
+            SealEfficacy : 0xD9,
+            MuteEfficacy : 0xDA,
+            BlindEfficacy : 0xDB,
+            SleepEfficacy : 0xDC,
+            BurnEfficacy : 0xDD,
+            FreezeEfficacy : 0xDE,
+            PetrifyEfficacy : 0xDF,
+            FaintEfficacy : 0xF0,
+            ConfuseEfficacy : 0xE1,
+            CharmEfficacy : 0xE2,
+            DeathblowEfficacy : 0xE3,
+            NightmareEfficacy : 0xE4,
+            DelayEfficacy : 0xE5,
+            VanishEfficacy : 0xE6,
+            StatDownEfficacy : 0xE7,
 
+            SlashEfficacy : 0xE8,
+            ThrustEfficacy : 0xEA,
+            PierceEfficacy : 0xEC,
+            StrikeEfficacy : 0xEE,
+
+            EarthEfficacy : 0xF0,
+            WaterEfficacy : 0xF1,
+            FireEfficacy : 0xF2,
+            WindEfficacy : 0xF3,
+            TimeEfficacy : 0xF4,
+            SpaceEfficacy : 0xF5,
+            MirageEfficacy : 0xF6,
+
+            // Cannot be changed.
+            SepithEarth : 0xF7,
+            SepithWater : 0xF8,
+            SepithFire : 0xF9,
+            SepithWind : 0xFA,
+            SepithTime : 0xFB,
+            SepithSpace : 0xFC,
+            SepithMirage : 0xFD,
+            SepithMass : 0xFE,
+
+            // Need to check these
+            SepithEarthMultiplier : 0x100,
+            SepithWaterMultiplier : 0x104,
+            SepithFireMultiplier : 0x108,
+            SepithWindMultiplier : 0x10C,
+            SepithTimeMultiplier : 0x110,
+            SepithSpaceMultiplier : 0x114,
+            SepithMirageMultiplier : 0x118,
+            SepithMassMultiplier : 0x11C,
+
+            DropItemId1 : 0x122,
+            DropItemId2 : 0x124,
+
+            // floats, need to check these.
+            StatVarMin : 0x130,
+            StatVarMax : 0x134,
+
+            EXPValue : 0x164, // Can change.
+
+            // Can be changed.
+            EarthSepith : 0x16E,
+            WaterSepith : 0x170,
+            FireSepith : 0x172,
+            WindSepith : 0x174,
+            TimeSepith : 0x176,
+            SpaceSepith : 0x178,
+            MirageSepith : 0x17A,
+            MassSepith : 0x17C,
+
+
+            // Test below, can change these.
             Flags : 0x420,
-            // Test below
+
             CurrentHP : 0x424,
             MaxHP : 0x428,
             CurrentEP : 0x42A,
@@ -207,6 +318,9 @@ export const Offsets = (function() {
 
             CurrentBreak : 0x454,
             MaxBreak : 0x458,
+
+            AGL : 0x45E,
+            EVA : 0x45F,
 
             EXP : 0x460,
             LVL : 0x464,

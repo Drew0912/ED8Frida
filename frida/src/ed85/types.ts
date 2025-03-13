@@ -301,6 +301,11 @@ export class BattleCharacter extends ED8BaseObject {
         return this.readPointer(0).equals(Addrs.VFTable.BattleCharWork);
     }
 
+    // Should not be needed as there is a static way to get.
+    get battleProc(): BattleProc {
+        return new BattleProc(this.readPointer(Offsets.BattleCharacter.BattleProc));
+    }
+
     get character(): Character {
         return new Character(this.readPointer(Offsets.BattleCharacter.Character));
     }
@@ -322,9 +327,386 @@ export class BattleCharacter extends ED8BaseObject {
         this.writeU16(Offsets.BattleCharacter.CurrentCP, value);
     }
 
-    // Values from t_mons, not used live in battle.
+    get poisonEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.PoisonEfficacy);
+    }
+
+    set poisonEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.PoisonEfficacy, value);
+    }
+
+    get sealEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.SealEfficacy);
+    }
+
+    set sealEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.SealEfficacy, value);
+    }
+
+    get muteEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.MuteEfficacy);
+    }
+
+    set muteEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.MuteEfficacy, value);
+    }
+
+    get blindEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.BlindEfficacy);
+    }
+
+    set blindEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.BlindEfficacy, value);
+    }
+
+    get sleepEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.SleepEfficacy);
+    }
+
+    set sleepEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.SleepEfficacy, value);
+    }
+
+    get burnEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.BurnEfficacy);
+    }
+
+    set burnEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.BurnEfficacy, value);
+    }
+
+    get freezeEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.FreezeEfficacy);
+    }
+
+    set freezeEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.FreezeEfficacy, value);
+    }
+
+    get petrifyEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.PetrifyEfficacy);
+    }
+
+    set petrifyEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.PetrifyEfficacy, value);
+    }
+
+    get faintEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.FaintEfficacy);
+    }
+
+    set faintEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.FaintEfficacy, value);
+    }
+
+    get confuseEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.ConfuseEfficacy);
+    }
+
+    set confuseEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.ConfuseEfficacy, value);
+    }
+
+    get charmEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.CharmEfficacy);
+    }
+
+    set charmEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.CharmEfficacy, value);
+    }
+
+    get deathblowEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.DeathblowEfficacy);
+    }
+
+    set deathblowEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.DeathblowEfficacy, value);
+    }
+
+    get nightmareEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.NightmareEfficacy);
+    }
+
+    set nightmareEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.NightmareEfficacy, value);
+    }
+
+    get delayEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.DelayEfficacy);
+    }
+
+    set delayEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.DelayEfficacy, value);
+    }
+
+    get vanishEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.VanishEfficacy);
+    }
+
+    set vanishEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.VanishEfficacy, value);
+    }
+
+    get statDownEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.StatDownEfficacy);
+    }
+
+    set statDownEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.StatDownEfficacy, value);
+    }
+
+    get slashEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.SlashEfficacy);
+    }
+
+    set slashEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.SlashEfficacy, value);
+    }
+
+    get thurstEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.ThrustEfficacy);
+    }
+
+    set thurstEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.ThrustEfficacy, value);
+    }
+
+    get pierceEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.PierceEfficacy);
+    }
+
+    set pierceEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.PierceEfficacy, value);
+    }
+
+    get strikeEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.StrikeEfficacy);
+    }
+
+    set strikeEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.StrikeEfficacy, value);
+    }
+
+    get earthEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.EarthEfficacy);
+    }
+
+    set earthEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.EarthEfficacy, value);
+    }
+
+    get waterEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.WaterEfficacy);
+    }
+
+    set waterEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.WaterEfficacy, value);
+    }
+
+    get fireEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.FireEfficacy);
+    }
+
+    set fireEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.FireEfficacy, value);
+    }
+
+    get windEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.WindEfficacy);
+    }
+
+    set windEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.WindEfficacy, value);
+    }
+
+    get timeEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.TimeEfficacy);
+    }
+
+    set timeEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.TimeEfficacy, value);
+    }
+
+    get spaceEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.SpaceEfficacy);
+    }
+
+    set spaceEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.SpaceEfficacy, value);
+    }
+
+    get mirageEfficacy(): number {
+        return this.readU8(Offsets.BattleCharacter.MirageEfficacy);
+    }
+
+    set mirageEfficacy(value: number) {
+        this.writeU8(Offsets.BattleCharacter.MirageEfficacy, value);
+    }
+
+    // Values from t_mons.tbl, not used live in battle.
+    // Changing some of these changes an enemy after restarting fight, no real need for this so no setters.
+    get algoFileName(): string {
+        return this.readPointer(Offsets.BattleCharacter.AlgoFileName).readAnsiString()!;
+    }
+
+    get modelName(): string {
+        return this.readPointer(Offsets.BattleCharacter.ModelName).readAnsiString()!;
+    }
+
+    get aniName(): string {
+        return this.readPointer(Offsets.BattleCharacter.AniName).readAnsiString()!;
+    }
+
+    get modelScale(): number {
+        return this.readFloat(Offsets.BattleCharacter.ModelScale);
+    }
+
+    get cameraPivotHeight(): number {
+        return this.readFloat(Offsets.BattleCharacter.CameraPivotHeight);
+    }
+
+    get float1(): number {
+        return this.readFloat(Offsets.BattleCharacter.float1);
+    }
+
+    get float2(): number {
+        return this.readFloat(Offsets.BattleCharacter.float2);
+    }
+
+    get float3(): number {
+        return this.readFloat(Offsets.BattleCharacter.float3);
+    }
+
+    get float4(): number {
+        return this.readFloat(Offsets.BattleCharacter.float4);
+    }
+
+    get float5(): number {
+        return this.readFloat(Offsets.BattleCharacter.float5);
+    }
+
+    get short6(): number {
+        return this.readU16(Offsets.BattleCharacter.short6);
+    }
+
+    get short7(): number {
+        return this.readU16(Offsets.BattleCharacter.short7);
+    }
+
+    get HPBase(): number {
+        return this.readU32(Offsets.BattleCharacter.HPBase);
+    }
+
+    get HPMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.HPMultiplier);
+    }
+
+    get EPBase(): number {
+        return this.readU32(Offsets.BattleCharacter.EPMax);
+    }
+
+    get EPInit(): number {
+        return this.readFloat(Offsets.BattleCharacter.EPInit);
+    }
+
+    get CPBase(): number {
+        return this.readU32(Offsets.BattleCharacter.CPMax);
+    }
+
+    get CPInit(): number {
+        return this.readFloat(Offsets.BattleCharacter.CPInit);
+    }
+
+    get STRBase(): number {
+        return this.readU32(Offsets.BattleCharacter.STRBase);
+    }
+
+    get STRMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.STRMultiplier);
+    }
+
+    get DEFBase(): number {
+        return this.readU32(Offsets.BattleCharacter.DEFBase);
+    }
+
+    get DEFMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.DEFMultiplier);
+    }
+
+    get ATSBase(): number {
+        return this.readU32(Offsets.BattleCharacter.ATSBase);
+    }
+
+    get ATSMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.ATSMultiplier);
+    }
+
+    get ADFBase(): number {
+        return this.readU32(Offsets.BattleCharacter.ADFBase);
+    }
+
+    get ADFMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.ADFMultiplier);
+    }
+
+    get DEXBase(): number {
+        return this.readU32(Offsets.BattleCharacter.DEXBase);
+    }
+
+    get DEXMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.DEXMultiplier);
+    }
+
+    get AGLBase(): number {
+        return this.readU16(Offsets.BattleCharacter.AGLBase);
+    }
+
+    get AGLMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.AGLMultiplier);
+    }
+
+    get EVABase(): number {
+        return this.readU16(Offsets.BattleCharacter.EVABase)
+    }
+
+    get SPDBase(): number {
+        return this.readU16(Offsets.BattleCharacter.SPDBase);
+    }
+
+    get SPDMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.SPDMultiplier);
+    }
+
+    get MOVBase(): number {
+        return this.readU16(Offsets.BattleCharacter.MOVBase);
+    }
+
+    get MOVMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.MOVMultiplier);
+    }
+
+    get EXPBase(): number {
+        return this.readU16(Offsets.BattleCharacter.EXPBase);
+    }
+
+    get EXPMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.EXPMultiplier);
+    }
+
+    get BreakBase(): number {
+        return this.readU16(Offsets.BattleCharacter.BreakBase);
+    }
+
+    get BreakMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.BreakMultiplier);
+    }
+
     get name(): string {
         return this.readPointer(Offsets.BattleCharacter.Name).readAnsiString()!;
+    }
+
+    get description(): string {
+        return this.readPointer(Offsets.BattleCharacter.Description).readAnsiString()!;
     }
 
 }

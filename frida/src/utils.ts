@@ -42,6 +42,10 @@ export class ED8BaseObject {
         this.impl.add(offset).writeUtf8String(str);
     }
 
+    writeU8(offset: number, value: number) {
+        this.impl.add(offset).writeU8(value);
+    }
+
     writeU16(offset: number, value: number) {
         this.impl.add(offset).writeU16(value);
     }
