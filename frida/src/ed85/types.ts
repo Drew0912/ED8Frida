@@ -319,12 +319,148 @@ export class BattleCharacter extends ED8BaseObject {
         this.writeU32(Offsets.BattleCharacter.CurrentHP, value);
     }
 
+    get maxHP(): number {
+        return this.readU32(Offsets.BattleCharacter.MaxHP);
+    }
+
+    set maxHP(value: number) {
+        this.writeU32(Offsets.BattleCharacter.MaxHP, value);
+    }
+
+    get currentEP(): number {
+        return this.readU16(Offsets.BattleCharacter.CurrentEP);
+    }
+
+    set currentEP(value: number) {
+        this.writeU16(Offsets.BattleCharacter.CurrentEP, value);
+    }
+
+    get maxEP(): number {
+        return this.readU16(Offsets.BattleCharacter.MaxEP);
+    }
+
+    set maxEP(value: number) {
+        this.writeU16(Offsets.BattleCharacter.MaxEP, value);
+    }
+
     get currentCP(): number {
         return this.readU16(Offsets.BattleCharacter.CurrentCP);
     }
 
     set currentCP(value: number) {
         this.writeU16(Offsets.BattleCharacter.CurrentCP, value);
+    }
+
+    get maxCP(): number {
+        return this.readU16(Offsets.BattleCharacter.MaxCP);
+    }
+
+    set maxCP(value: number) {
+        this.writeU16(Offsets.BattleCharacter.MaxCP, value);
+    }
+
+    get flags(): number {
+        return this.readU32(Offsets.BattleCharacter.Flags);
+    }
+
+    set flags(value: number) {
+        this.writeU32(Offsets.BattleCharacter.Flags, value);
+    }
+
+    get str(): number {
+        return this.readU32(Offsets.BattleCharacter.STR);
+    }
+
+    set str(value: number) {
+        this.writeU32(Offsets.BattleCharacter.STR, value);
+    }
+
+    get def(): number {
+        return this.readU32(Offsets.BattleCharacter.DEF);
+    }
+
+    set def(value: number) {
+        this.writeU32(Offsets.BattleCharacter.DEF, value);
+    }
+
+    get ats(): number {
+        return this.readU32(Offsets.BattleCharacter.ATS);
+    }
+
+    set ats(value: number) {
+        this.writeU32(Offsets.BattleCharacter.ATS, value);
+    }
+
+    get adf(): number {
+        return this.readU32(Offsets.BattleCharacter.ADF);
+    }
+
+    set adf(value: number) {
+        this.writeU32(Offsets.BattleCharacter.ADF, value);
+    }
+
+    get spd(): number {
+        return this.readU16(Offsets.BattleCharacter.SPD);
+    }
+
+    set spd(value: number) {
+        this.writeU16(Offsets.BattleCharacter.SPD, value);
+    }
+
+    get mov(): number {
+        return this.readU16(Offsets.BattleCharacter.MOV);
+    }
+
+    set mov(value: number) {
+        this.writeU16(Offsets.BattleCharacter.MOV, value);
+    }
+
+    get currentBreak(): number {
+        return this.readU32(Offsets.BattleCharacter.CurrentBreak);
+    }
+
+    set currentBreak(value: number) {
+        this.writeU32(Offsets.BattleCharacter.CurrentBreak, value);
+    }
+
+    get maxBreak(): number {
+        return this.readU32(Offsets.BattleCharacter.MaxBreak);
+    }
+
+    set maxBreak(value: number) {
+        this.writeU32(Offsets.BattleCharacter.MaxBreak, value);
+    }
+
+    get agl(): number {
+        return this.readU8(Offsets.BattleCharacter.AGL);
+    }
+
+    set agl(value: number) {
+        this.writeU8(Offsets.BattleCharacter.AGL, value);
+    }
+
+    get eva(): number {
+        return this.readU8(Offsets.BattleCharacter.EVA);
+    }
+
+    set eva(value: number) {
+        this.writeU8(Offsets.BattleCharacter.EVA, value);
+    }
+
+    get exp(): number {
+        return this.readU32(Offsets.BattleCharacter.EXP);
+    }
+
+    set exp(value: number) {
+        this.writeU32(Offsets.BattleCharacter.EXP, value);
+    }
+
+    get lvl(): number {
+        return this.readU32(Offsets.BattleCharacter.LVL); // Check this is U32.
+    }
+
+    set lvl(value: number) {
+        this.writeU32(Offsets.BattleCharacter.LVL, value); // Check this is U32.
     }
 
     get poisonEfficacy(): number {
@@ -456,35 +592,35 @@ export class BattleCharacter extends ED8BaseObject {
     }
 
     get slashEfficacy(): number {
-        return this.readU8(Offsets.BattleCharacter.SlashEfficacy);
+        return this.readU16(Offsets.BattleCharacter.SlashEfficacy);
     }
 
     set slashEfficacy(value: number) {
-        this.writeU8(Offsets.BattleCharacter.SlashEfficacy, value);
+        this.writeU16(Offsets.BattleCharacter.SlashEfficacy, value);
     }
 
     get thurstEfficacy(): number {
-        return this.readU8(Offsets.BattleCharacter.ThrustEfficacy);
+        return this.readU16(Offsets.BattleCharacter.ThrustEfficacy);
     }
 
     set thurstEfficacy(value: number) {
-        this.writeU8(Offsets.BattleCharacter.ThrustEfficacy, value);
+        this.writeU16(Offsets.BattleCharacter.ThrustEfficacy, value);
     }
 
     get pierceEfficacy(): number {
-        return this.readU8(Offsets.BattleCharacter.PierceEfficacy);
+        return this.readU16(Offsets.BattleCharacter.PierceEfficacy);
     }
 
     set pierceEfficacy(value: number) {
-        this.writeU8(Offsets.BattleCharacter.PierceEfficacy, value);
+        this.writeU16(Offsets.BattleCharacter.PierceEfficacy, value);
     }
 
     get strikeEfficacy(): number {
-        return this.readU8(Offsets.BattleCharacter.StrikeEfficacy);
+        return this.readU16(Offsets.BattleCharacter.StrikeEfficacy);
     }
 
     set strikeEfficacy(value: number) {
-        this.writeU8(Offsets.BattleCharacter.StrikeEfficacy, value);
+        this.writeU16(Offsets.BattleCharacter.StrikeEfficacy, value);
     }
 
     get earthEfficacy(): number {
@@ -541,6 +677,79 @@ export class BattleCharacter extends ED8BaseObject {
 
     set mirageEfficacy(value: number) {
         this.writeU8(Offsets.BattleCharacter.MirageEfficacy, value);
+    }
+
+    // Check that this is writable to mid battle as there is another exp value.
+    get expValue(): number {
+        return this.readU16(Offsets.BattleCharacter.EXPValue); // Check that this is U16 or U32
+    }
+
+    set expValue(value: number) {
+        this.writeU16(Offsets.BattleCharacter.EXPValue, value); // Check that this is U16 or U32
+    }
+
+    get earthSepith(): number {
+        return this.readU16(Offsets.BattleCharacter.EarthSepith);
+    }
+
+    set earthSepith(value: number) {
+        this.writeU16(Offsets.BattleCharacter.EarthSepith, value);
+    }
+
+    get waterSepith(): number {
+        return this.readU16(Offsets.BattleCharacter.WaterSepith);
+    }
+
+    set waterSepith(value: number) {
+        this.writeU16(Offsets.BattleCharacter.WaterSepith, value);
+    }
+
+    get fireSepith(): number {
+        return this.readU16(Offsets.BattleCharacter.FireSepith);
+    }
+
+    set fireSepith(value: number) {
+        this.writeU16(Offsets.BattleCharacter.FireSepith, value);
+    }
+
+    get windSepith(): number {
+        return this.readU16(Offsets.BattleCharacter.WindSepith);
+    }
+
+    set windSepith(value: number) {
+        this.writeU16(Offsets.BattleCharacter.WindSepith, value);
+    }
+
+    get timeSepith(): number {
+        return this.readU16(Offsets.BattleCharacter.TimeSepith);
+    }
+
+    set timeSepith(value: number) {
+        this.writeU16(Offsets.BattleCharacter.TimeSepith, value);
+    }
+
+    get spaceSepith(): number {
+        return this.readU16(Offsets.BattleCharacter.SpaceSepith);
+    }
+
+    set spaceSepith(value: number) {
+        this.writeU16(Offsets.BattleCharacter.SpaceSepith, value);
+    }
+
+    get mirageSepith(): number {
+        return this.readU16(Offsets.BattleCharacter.MirageSepith);
+    }
+
+    set mirageSepith(value: number) {
+        this.writeU16(Offsets.BattleCharacter.MirageSepith, value);
+    }
+
+    get massSepith(): number {
+        return this.readU16(Offsets.BattleCharacter.MassSepith);
+    }
+
+    set massSepith(value: number) {
+        this.writeU16(Offsets.BattleCharacter.MassSepith, value);
     }
 
     // Values from t_mons.tbl, not used live in battle.
@@ -707,6 +916,91 @@ export class BattleCharacter extends ED8BaseObject {
 
     get description(): string {
         return this.readPointer(Offsets.BattleCharacter.Description).readAnsiString()!;
+    }
+
+    get sepithEarth(): number {
+        return this.readU8(Offsets.BattleCharacter.SepithEarth);
+    }
+
+    get sepithWater(): number {
+        return this.readU8(Offsets.BattleCharacter.SepithWater);
+    }
+
+    get sepithFire(): number {
+        return this.readU8(Offsets.BattleCharacter.SepithFire);
+    }
+
+    get sepithWind(): number {
+        return this.readU8(Offsets.BattleCharacter.SepithWind);
+    }
+
+    get sepithTime(): number {
+        return this.readU8(Offsets.BattleCharacter.SepithTime);
+    }
+
+    get sepithSpace(): number {
+        return this.readU8(Offsets.BattleCharacter.SepithSpace);
+    }
+
+    get sepithMirage(): number {
+        return this.readU8(Offsets.BattleCharacter.SepithMirage);
+    }
+
+    get sepithMass(): number {
+        return this.readU8(Offsets.BattleCharacter.SepithMass);
+    }
+
+    get sepithWaterMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.SepithWaterMultiplier);
+    }
+
+    get sepithFireMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.SepithFireMultiplier);
+    }
+
+    get sepithWindMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.SepithWindMultiplier);
+    }
+
+    get sepithTimeMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.SepithTimeMultiplier);
+    }
+
+    get sepithSpaceMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.SepithSpaceMultiplier);
+    }
+
+    get sepithMirageMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.SepithMirageMultiplier);
+    }
+
+    get sepithMassMultiplier(): number {
+        return this.readFloat(Offsets.BattleCharacter.SepithMassMultiplier);
+    }
+
+    get statVarMin(): number {
+        return this.readFloat(Offsets.BattleCharacter.StatVarMin);
+    }
+
+    get statVarMax(): number {
+        return this.readFloat(Offsets.BattleCharacter.StatVarMax);
+    }
+
+    // unknown if can change mid battle, needs testing.
+    get dropItemId1(): number {
+        return this.readU16(Offsets.BattleCharacter.DropItemId1);
+    }
+
+    set dropItemId1(id: number) {
+        this.writeU16(Offsets.BattleCharacter.DropItemId1, id);
+    }
+
+    get dropItemId2(): number {
+        return this.readU16(Offsets.BattleCharacter.DropItemId2);
+    }
+
+    set dropItemId2(id: number) {
+        this.writeU16(Offsets.BattleCharacter.DropItemId2, id);
     }
 
 }
