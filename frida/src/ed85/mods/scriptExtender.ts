@@ -4,7 +4,7 @@ import { BattleProc, ED85 } from "../types";
 import * as utils from "../../utils";
 
 import { setLoggerLevel } from "./logger";
-import { displayEnemyCPByName } from "./advancedEnemyStats";
+import { displayEnemyCPByName, replaceDescriptionWithEnemyStats } from "./advancedEnemyStats";
 
 let tracing = false;
 export function setTracing(bool : boolean) {
@@ -71,11 +71,14 @@ export function hookScriptExtender() {
                     // Make it so that enemy turns do not increase this value.
                     ED85.battleProc.numberOfTurnsPassedInBattle--;
                 }
-                else if (stringInF1 == 'Test') {
-                    displayEnemyCPByName(0xF043);
+                else if (stringInF1.slice(0,9) == 'DisplayCP') {
+                    displayEnemyCPByName(parseInt(stringInF1.slice(10)));
+                }
+                else if (stringInF1.slice(0,11) == 'ReplaceDesc') {
+                    replaceDescriptionWithEnemyStats(parseInt(stringInF1.slice(12)));
                 }
                 else {
-                    utils.log(`ScriptExtender: Unknown string (${stringInF1})`);
+                    utils.log(`ED8Frida.scriptExtender: Unknown string (${stringInF1})`);
                 }
                 return ScriptExtender(ScriptScn, Script, 7); 
             }

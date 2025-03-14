@@ -241,7 +241,7 @@ export class BattleProc extends ED8BaseObject {
     static getBattleCharWorkForEnemyNumber(pseudoChrId: number): BattleCharacter | undefined {
         let value = -1;
         // Getting BattleCharacter index of last present party member.
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i <= 8; i++) {
             // 0x100 contains all BattleCharWork, 0x110 contains only player BattleCharWork
             const BattleCharWork100 = ED85.battleProc.allBattleCharWork.add(i*8).readPointer();
             const BattleCharWork110 = ED85.battleProc.onlyPlayerBattleCharWork.add(i*8).readPointer();
@@ -431,6 +431,7 @@ export class BattleCharacter extends ED8BaseObject {
         this.writeU32(Offsets.BattleCharacter.MaxBreak, value);
     }
 
+    // agl has some problems.
     get agl(): number {
         return this.readU8(Offsets.BattleCharacter.AGL);
     }
@@ -679,6 +680,14 @@ export class BattleCharacter extends ED8BaseObject {
         this.writeU8(Offsets.BattleCharacter.MirageEfficacy, value);
     }
 
+    get description(): string {
+        return this.readPointer(Offsets.BattleCharacter.Description).readAnsiString()!;
+    }
+
+    set description(s: string) {
+        this.readPointer(Offsets.BattleCharacter.Description).writeUtf8String(s);
+    }
+
     // Check that this is writable to mid battle as there is another exp value.
     get expValue(): number {
         return this.readU16(Offsets.BattleCharacter.EXPValue); // Check that this is U16 or U32
@@ -912,10 +921,6 @@ export class BattleCharacter extends ED8BaseObject {
 
     get name(): string {
         return this.readPointer(Offsets.BattleCharacter.Name).readAnsiString()!;
-    }
-
-    get description(): string {
-        return this.readPointer(Offsets.BattleCharacter.Description).readAnsiString()!;
     }
 
     get sepithEarth(): number {
