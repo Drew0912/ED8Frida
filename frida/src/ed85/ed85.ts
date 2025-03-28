@@ -9,7 +9,7 @@ import { fileRedirection } from "./mods/fileRedirection";
 import { hookActMenu, loadDebug } from "./mods/debugScript";
 import { hookScriptExtender, setTracing } from "./mods/scriptExtender";
 import { abnormalStatusLimitWithBossFlagSub1, disableAbnormalStatusLimitWithBossFlag } from "./mods/abnormalStatusBossFlag";
-import { patchInsightEVA, patchInsightACC, patchBlindEVA, patchBlindACC } from "./mods/insightChange";
+import { patchInsightEVA, patchInsightACC, patchBlindEVA, patchBlindACC, limitEVA } from "./mods/insightChange";
 import { braveOrderDownOnEnemy } from "./mods/braveOrderDurationDownOnEnemyTurn";
 
 function test() {
@@ -18,14 +18,14 @@ function test() {
 
 export function main() {
     loadDebug();
-    const patchDirs = [
-        'Higher/',
-        'Drew0912/',
-        'mod/',
-        'patch/',
-        'data/',
-    ];
-    utils.setPatchDirs(patchDirs)
+    // const patchDirs = [
+    //     'Higher/',
+    //     'Drew0912/',
+    //     'mod/',
+    //     'patch/',
+    //     'data/',
+    // ];
+    // utils.setPatchDirs(patchDirs)
     // Config stuff
     // if (ED85.getConfig().isSetPatchDirs) {
     //     const dirs = ED85.getConfig().patchDirs;
@@ -35,8 +35,8 @@ export function main() {
 
     // Add setting UseSigScan here. Race condition with FridaLoader very possible with exe code being executed before frida.
 
-    if (ED85.getConfig().isFileRedirection)
-        fileRedirection();
+    // if (ED85.getConfig().isFileRedirection)
+    //     fileRedirection();
     // if (ED85.getConfig().isLoadDebug)
     //     loadDebug();
 
@@ -70,6 +70,9 @@ export function main() {
         patchBlindACC(ED85.getConfig().patchBlindACC[1])
     if (ED85.getConfig().isBODurationDownOnEnemyTurn)
         braveOrderDownOnEnemy();
+
+    if (ED85.getConfig().limitEVA[0])
+        limitEVA(ED85.getConfig().limitEVA[1])
 
     utils.log("Reverie Frida script loaded.");
 

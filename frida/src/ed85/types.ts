@@ -45,27 +45,29 @@ interface IConfig {
     patchInsightACC : [boolean, number],
     patchBlindEVA : [boolean, number],
     patchBlindACC : [boolean, number],
+    limitEVA : [boolean, number],
     isBODurationDownOnEnemyTurn : boolean,
 }
-let defaultConfig: IConfig = {
-    isFileRedirection : false,
-    patchDirs : ['data/'],
-    isSetPatchDirs : false,
-    isOpenCommandPrompt: false,
-    isLoadDebug : true,
-    isHookActMenu : [false, 'FC_ActMenu_MOD'],
-    isOutputDebugInfo : 0,
-    isChangeTitleVerString : [true, 'ED8Frida - No config file found', true],
-    isAddToWindowText : true,
-    isOpcodeTracing : false,
-    isDisableAbnormalStatusLimitWithBossFlag: false,
-    isAbnormalStatusLimitWithBossFlagSub1: false,
-    patchInsightEVA : [false, 50],
-    patchInsightACC : [false, 50],
-    patchBlindEVA : [false, 50],
-    patchBlindACC : [false, 50],
-    isBODurationDownOnEnemyTurn : false,
-}
+// let defaultConfig: IConfig = {
+//     isFileRedirection : false,
+//     patchDirs : ['data/'],
+//     isSetPatchDirs : false,
+//     isOpenCommandPrompt: false,
+//     isLoadDebug : true,
+//     isHookActMenu : [false, 'FC_ActMenu_MOD'],
+//     isOutputDebugInfo : 0,
+//     isChangeTitleVerString : [true, 'ED8Frida - No config file found', true],
+//     isAddToWindowText : true,
+//     isOpcodeTracing : false,
+//     isDisableAbnormalStatusLimitWithBossFlag: false,
+//     isAbnormalStatusLimitWithBossFlagSub1: false,
+//     patchInsightEVA : [false, 50],
+//     patchInsightACC : [false, 50],
+//     patchBlindEVA : [false, 50],
+//     patchBlindACC : [false, 50],
+//     limitEVA : [false, 75],
+//     isBODurationDownOnEnemyTurn : false,
+// }
 
 export class Script extends ED8BaseObject {
     private static _Load = new NativeFunction(Addrs.Script.Load, "pointer", ['pointer', 'pointer', 'uint32', 'bool'], 'win64');
@@ -173,6 +175,27 @@ export class ED85 extends ED8BaseObject {
     }
 
     static getConfig(): IConfig {
+        const defaultConfig: IConfig = {
+            isFileRedirection : false,
+            patchDirs : ['data/'],
+            isSetPatchDirs : false,
+            isOpenCommandPrompt: false,
+            isLoadDebug : true,
+            isHookActMenu : [false, 'FC_ActMenu_MOD'],
+            isOutputDebugInfo : 0,
+            isChangeTitleVerString : [true, 'ED8Frida - No config file found', true],
+            isAddToWindowText : true,
+            isOpcodeTracing : false,
+            isDisableAbnormalStatusLimitWithBossFlag: false,
+            isAbnormalStatusLimitWithBossFlagSub1: false,
+            patchInsightEVA : [false, 50],
+            patchInsightACC : [false, 50],
+            patchBlindEVA : [false, 50],
+            patchBlindACC : [false, 50],
+            limitEVA : [false, 75],
+            isBODurationDownOnEnemyTurn : false,
+        }
+
         if (this._config)
             return this._config;
 

@@ -66,6 +66,8 @@ export const Addrs = (function() {
                     InsightACCValue : Modules.ED85.base.add(0x12EC97),
                     BlindEVAValue : Modules.ED85.base.add(0x12ECB7),
                     BlindACCValue : Modules.ED85.base.add(0x12ECAE),
+
+                    LimitEVAInstruction : Modules.ED85.base.add(0x12EC8B),
                 },
 
                 BODurationDownOnEnemyTurn : Modules.ED85.base.add(0x0E1968),
@@ -122,6 +124,8 @@ export const Addrs = (function() {
                     InsightACCValue : Modules.ED85.base.add(0x12F587),
                     BlindEVAValue : Modules.ED85.base.add(0x12F5A7),
                     BlindACCValue : Modules.ED85.base.add(0x12F59E),
+
+                    LimitEVAInstruction : Modules.ED85.base.add(0x12F57B),
                 },
 
                 BODurationDownOnEnemyTurn : Modules.ED85.base.add(0x0E1488),

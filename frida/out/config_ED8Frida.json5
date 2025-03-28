@@ -64,6 +64,10 @@
     patchBlindEVA: [false, 100],
     patchBlindACC: [false, 200],
 
+    // Whether to limit EVA value in battle, does not show in menus.
+    // First parameter is whether to patch or not, second is the value.
+    limitEVA: [false, 75],
+
     // Whether the current brave order turn duration goes down on enemy turns.
     isBODurationDownOnEnemyTurn: false,
 }
