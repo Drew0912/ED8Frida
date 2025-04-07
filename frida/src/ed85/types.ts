@@ -48,26 +48,6 @@ interface IConfig {
     limitEVA : [boolean, number],
     isBODurationDownOnEnemyTurn : boolean,
 }
-// let defaultConfig: IConfig = {
-//     isFileRedirection : false,
-//     patchDirs : ['data/'],
-//     isSetPatchDirs : false,
-//     isOpenCommandPrompt: false,
-//     isLoadDebug : true,
-//     isHookActMenu : [false, 'FC_ActMenu_MOD'],
-//     isOutputDebugInfo : 0,
-//     isChangeTitleVerString : [true, 'ED8Frida - No config file found', true],
-//     isAddToWindowText : true,
-//     isOpcodeTracing : false,
-//     isDisableAbnormalStatusLimitWithBossFlag: false,
-//     isAbnormalStatusLimitWithBossFlagSub1: false,
-//     patchInsightEVA : [false, 50],
-//     patchInsightACC : [false, 50],
-//     patchBlindEVA : [false, 50],
-//     patchBlindACC : [false, 50],
-//     limitEVA : [false, 75],
-//     isBODurationDownOnEnemyTurn : false,
-// }
 
 export class Script extends ED8BaseObject {
     private static _Load = new NativeFunction(Addrs.Script.Load, "pointer", ['pointer', 'pointer', 'uint32', 'bool'], 'win64');
@@ -257,6 +237,7 @@ export class BattleProc extends ED8BaseObject {
     // Gets pointer for the first parameter used in ED85.playerSBreakFunction. May be useful for other things.
     // ED85.battleProc.SBreakParam1.add(0x358) (braveOrderDurationDownOnEnemyTurn)
     // Offsets.BattleProc.SBreakParam1 == 0x8188
+    // BattleATManager
     get SBreakParam1(): NativePointer {
         return this.readPointer(Offsets.BattleProc.SBreakParam1);
     }

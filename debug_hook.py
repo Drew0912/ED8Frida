@@ -944,6 +944,7 @@ def DiffModMenu(menuVar):
         ('Clear BattleFlags (not needed)', ClearFlagsFunc),
         ('ResetItemUsageLimitFlag (should not be needed)', lambda: Call(ScriptId.BtlSys, 'ResetItemCountUsageLimit')),
         ('Add item "Debug: Kill Target"', wrapper(AddItem, 0x0, 0x0080, 9)),
+         ('Add item "Debug: View Enemy Stats (crashes)"', wrapper(AddItem, 0x0, 0x0081, 9)),
         fontSize = 33.0,
     )
 
@@ -1798,14 +1799,26 @@ def SBreak_Enemy_Maintain():
     EnemySBreak(0xF049, 0, 100, EnemySBreakChrTurnEnum.NoCheck, True)
     EnemySBreak(0xF04A, 0, 100, EnemySBreakChrTurnEnum.NoCheck, True)
 
-    if DEBUG_MESSAGES:
-        SBreak_Enemy_CP_Output()
+    # No longer needed if using ED8Frida to display enemy CP.
+    # if DEBUG_MESSAGES:
+    #     SBreak_Enemy_CP_Output()
 
     Return()
 
 def SBreak_Enemy_CP_Output():
     for chrId in [0xF043, 0xF044, 0xF045, 0xF046, 0xF047, 0xF048, 0xF049, 0xF04A]:
         endLabel = genLabel()
+
+        # Check if chrId exists, also stops Rean being detected.
+        If(
+            (
+                (Expr.Eval, f'BattleGetChrStatus({chrId}, 0x14)'), # HP
+                (Expr.PushLong, 0x0),
+                Expr.Gtr,
+                Expr.Return,
+            ),
+            endLabel,
+        )
 
         for i in range(0,201):
             skipLabel = genLabel()

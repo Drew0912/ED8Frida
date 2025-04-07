@@ -6,8 +6,6 @@
     // 'isSetPatchDirs' has to be true.
     // Currently changing this does nothing, always false.
     patchDirs: [
-        'Higher/',
-        'Drew0912/',
         'mod/',
         'patch/',
         'data/',
@@ -39,7 +37,7 @@
     // Third parameter is to keep the version number in the string.
     isChangeTitleVerString: [
         true,
-        'ED8Frida',
+        'ED8Frida v0.2-beta - Exe ',
         true,
     ],
 
