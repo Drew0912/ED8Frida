@@ -28,5 +28,9 @@ export function replaceDescriptionWithEnemyStats(pseudoChrId: number) {
         return;
     }
 
-    enemyBattleChar.description = `STR: ${enemyBattleChar.str}, DEF: ${enemyBattleChar.def}\nATS: ${enemyBattleChar.ats}, ADF: ${enemyBattleChar.adf}\nSPD: ${enemyBattleChar.spd}, MOV: ${enemyBattleChar.mov}\nEVA: ${enemyBattleChar.eva}`;
+    utils.log(ED85.battleProc.BattleATManager.toString());
+    utils.log(ED85.battleProc.BattleATManager.pointer.add(0x358).readPointer().toString()); //UIBtlATIcon
+    utils.log(ED85.battleProc.BattleATManager.pointer.add(0x358).readPointer().add(0x35C).readU32().toString()); //Action value.
+
+    // enemyBattleChar.description = `STR: ${enemyBattleChar.str}, DEF: ${enemyBattleChar.def}\nATS: ${enemyBattleChar.ats}, ADF: ${enemyBattleChar.adf}\nSPD: ${enemyBattleChar.spd}, MOV: ${enemyBattleChar.mov}\nEVA: ${enemyBattleChar.eva}`;
 }

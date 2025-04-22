@@ -173,13 +173,13 @@ export const Offsets = (function() {
             BattleViewMaybe : 0x50,
             BattleTableMaybe : 0x60,
 
-            PartOfTurnCounter: 0x68, // BattleResultManager
+            BattleResultManager: 0x68, // BattleResultManager
             allBattleCharWork : 0x100,
             onlyPlayerBattleCharWork : 0x110,
 
             BattleScriptName : 0x31C,
 
-            SBreakParam1 : 0x8188,
+            BattleATManager : 0x8188, // BattleATManager
         },
 
         BattleCharacter : { // BattleCharWork
@@ -330,7 +330,20 @@ export const Offsets = (function() {
             LVL : 0x464,
             SomethingLikeLvl : 0x468,
 
+            BattleInfoTable : 0x4F8,
+
             SomeChrIdMaybe : 0x50A,
+        },
+
+        // ED85.BattleProc.SBreak1Param(BattleATManager) + 0x340 -> array of pointers
+        // for each pointer:
+        // 0x28 = BattleCharWork
+        // 0x30 = live? UIBtlATIcon
+        //     0x35C = AT value
+
+        BattleATManager : {
+            ListOfPointers : 0x340, // Array of pointers, order players then enemies.
+            CurrentTurnBattleCharacter : 0x358,
         },
 
         Character : {

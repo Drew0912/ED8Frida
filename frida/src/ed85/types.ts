@@ -219,7 +219,7 @@ export class ED85 extends ED8BaseObject {
         }();
 
         if (battleCharWork) {
-            ED85._SBreak(ED85.battleProc.SBreakParam1, battleCharWork.pointer, 1, 0, 0);
+            ED85._SBreak(ED85.battleProc.BattleATManager.pointer, battleCharWork.pointer, 1, 0, 0);
         }
     }
 }
@@ -234,37 +234,38 @@ export class BattleProc extends ED8BaseObject {
         return this.readPointer(Offsets.BattleProc.onlyPlayerBattleCharWork);
     }
 
-    // Gets pointer for the first parameter used in ED85.playerSBreakFunction. May be useful for other things.
-    // ED85.battleProc.SBreakParam1.add(0x358) (braveOrderDurationDownOnEnemyTurn)
-    // Offsets.BattleProc.SBreakParam1 == 0x8188
-    // BattleATManager
-    get SBreakParam1(): NativePointer {
-        return this.readPointer(Offsets.BattleProc.SBreakParam1);
-    }
-
     static getBattleCharWorkForEnemyNumber(pseudoChrId: number): BattleCharacter | undefined {
-        let value = -1;
-        // Getting BattleCharacter index of last present party member.
-        for (let i = 0; i <= 8; i++) {
+        let numOfPlayerChar = -1;
+        // Getting BattleCharacter index of last present party member plus 1 (zero index).
+        for (let i = 1; i <= 8; i++) {
             // 0x100 contains all BattleCharWork, 0x110 contains only player BattleCharWork
             const BattleCharWork100 = ED85.battleProc.allBattleCharWork.add(i*8).readPointer();
             const BattleCharWork110 = ED85.battleProc.onlyPlayerBattleCharWork.add(i*8).readPointer();
             if (!BattleCharWork100.equals(BattleCharWork110)) {
-                value = i;
-                break
+                numOfPlayerChar = i;
+                break;
             }
         }
-        if (value == -1) { return undefined } // No party members? Not possible.
-        // utils.log("getBattleCharWorkForEnemyNumber: Should be number of party members: %s", value);
+        if (numOfPlayerChar == -1) { return undefined } // No party members? Not possible.
+        // utils.log("getBattleCharWorkForEnemyNumber: Should be number of party members: %s", numOfPlayerChar);
 
-        // Checks if the found BattleCharacter actually is a BattleCharacter struct.
-        // Should only not clear if SBreaking for an enemy PseudoChrId not present in battle.
-        const SBreakSelf = new BattleCharacter(ED85.battleProc.allBattleCharWork.add((value+pseudoChrId-0xF043)*8).readPointer());
-        if (SBreakSelf.isValid()) {
-            return SBreakSelf;
+        const foundBattleChar = new BattleCharacter(ED85.battleProc.allBattleCharWork.add((numOfPlayerChar+pseudoChrId-0xF043)*8).readPointer());
+        // Checks if the found BattleCharacter actually is a BattleCharacter struct. Should only fail if pseudoChrId is not valid for the fight.
+        if (foundBattleChar.isValid()) {
+            return foundBattleChar;
         }
         return undefined;
         
+    }
+
+    // ED85.battleProc.SBreakParam1.add(0x358) (braveOrderDurationDownOnEnemyTurn)
+    // Offsets == 0x8188
+    get BattleATManager(): BattleATManager {
+        return new BattleATManager(this.readPointer(Offsets.BattleProc.BattleATManager));
+    }
+
+    get BattleResultManager(): BattleResultManager {
+        return new BattleResultManager(this.readPointer(Offsets.BattleProc.BattleResultManager));
     }
 
     get braveOrderDurationCount(): number {
@@ -286,17 +287,6 @@ export class BattleProc extends ED8BaseObject {
     // Not tested
     get battleScriptName(): string {
         return this.readPointer(Offsets.BattleProc.BattleScriptName).readAnsiString()!;
-    }
-
-    // This value is used for action count in RP condition fights,
-    // (Expr.Eval, 'BattleCmd(0x5C, 0x00)') gets this number
-    // Offset 0x68
-    get numberOfTurnsPassedInBattle(): number {
-        return this.readPointer(Offsets.BattleProc.PartOfTurnCounter).add(0x39C).readU32();
-    }
-
-    set numberOfTurnsPassedInBattle(value: number) {
-        this.readPointer(Offsets.BattleProc.PartOfTurnCounter).add(0x39C).writeU32(value);
     }
 }
 
@@ -1022,4 +1012,21 @@ class Character extends ED8BaseObject {
     set name(str: string) {
         this.writeUtf8String(Offsets.Character.Name, str);
     }
+}
+
+class BattleResultManager extends ED8BaseObject {
+    // This value is used for action count in RP condition fights,
+    // (Expr.Eval, 'BattleCmd(0x5C, 0x00)') gets this number
+    get turnsPassedInBattle(): number {
+        return this.readU32(0x39C);
+    }
+
+    set turnsPassedInBattle(value: number) {
+        this.writeU32(0x39C, value);
+    }
+
+}
+
+class BattleATManager extends ED8BaseObject {
+
 }

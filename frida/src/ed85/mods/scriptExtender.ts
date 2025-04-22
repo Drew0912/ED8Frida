@@ -69,7 +69,7 @@ export function hookScriptExtender() {
                 }
                 else if (stringInF1 == "TurnCounterEnemy") {
                     // Make it so that enemy turns do not increase this value.
-                    ED85.battleProc.numberOfTurnsPassedInBattle--;
+                    ED85.battleProc.BattleResultManager.turnsPassedInBattle--;
                 }
                 else if (stringInF1.slice(0,9) == 'DisplayCP') {
                     displayEnemyCPByName(parseInt(stringInF1.slice(10)));
