@@ -10,7 +10,8 @@ import { hookActMenu, loadDebug } from "./mods/debugScript";
 import { hookScriptExtender, setTracing } from "./mods/scriptExtender";
 import { abnormalStatusLimitWithBossFlagSub1, disableAbnormalStatusLimitWithBossFlag } from "./mods/abnormalStatusBossFlag";
 import { patchInsightEVA, patchInsightACC, patchBlindEVA, patchBlindACC, limitEVA } from "./mods/insightChange";
-import { braveOrderDownOnEnemy } from "./mods/braveOrderDurationDownOnEnemyTurn";
+import { braveOrderDownOnEnemy} from "./mods/braveOrderDurationDownOnEnemyTurn";
+import { BGMReplace } from "./mods/bgmControl";
 
 function test() {
     
@@ -74,8 +75,10 @@ export function main() {
     if (ED85.getConfig().limitEVA[0])
         limitEVA(ED85.getConfig().limitEVA[1])
 
+    BGMReplace();
+
     utils.log("Reverie Frida script loaded.");
 
-    // test();
+    test();
 
 }

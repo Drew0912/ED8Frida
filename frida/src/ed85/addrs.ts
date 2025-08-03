@@ -5,6 +5,9 @@ import * as utils from "../utils";
 // Add some option (config file) to set script to reverie independent of version.
 let UseSigScan = false;
 
+// Additional info (to be checked):
+// hnk.exe+1479c24 map string
+
 // Synchronous scan using input sig string.
 function sigScan(sig: string) : NativePointer{
     const result = Memory.scanSync(Modules.ED85.base, Modules.ED85.size, sig);
@@ -75,6 +78,8 @@ export const Addrs = (function() {
                 VFTable: {
                     BattleCharWork : Modules.ED85.base.add(0xC20260),
                 },
+
+                PlayBGM : Modules.ED85.base.add(0x342CC0),
             };
         case 'ed85_v114':
             return {
@@ -133,6 +138,8 @@ export const Addrs = (function() {
                 VFTable: {
                     BattleCharWork : Modules.ED85.base.add(0xC290C0),
                 },
+
+                PlayBGM : Modules.ED85.base.add(0x3437B0),
             };
     }
 })();
@@ -141,6 +148,7 @@ export const Offsets = (function() {
     return {
         ED85 : {
             ScriptManager : 0x1DA8,
+            t_bgm : 0x5F8120, //???
         },
 
         ScriptManager : {
@@ -180,6 +188,10 @@ export const Offsets = (function() {
             BattleScriptName : 0x31C,
 
             BattleATManager : 0x8188, // BattleATManager
+
+            FieldBGM : 0x220,
+            NormalBGM : 0x222,
+            PinchBGM : 0x226,
         },
 
         BattleCharacter : { // BattleCharWork
