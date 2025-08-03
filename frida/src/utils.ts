@@ -159,6 +159,18 @@ export function hexDoubletoDouble(hexString : string) : number {
     return doubles[0];
 }
 
+export function uInt32Tofloat(num: number): number {
+    let v = new DataView(new ArrayBuffer(4));
+    v.setUint32(0, num);
+    return v.getFloat32(0);
+}
+
+export function floatToUInt32(float: number): number {
+    let v = new DataView(new ArrayBuffer(4));
+    v.setFloat32(0, float);
+    return v.getUint32(0);
+}
+
 export function readFileContent(path: string): ArrayBuffer | null {
     const fp = API.crt.fopen(UTF8(path), UTF8('rb')) as NativePointer;
     if (fp.isNull()) {
