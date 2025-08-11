@@ -2,12 +2,17 @@ import { Interceptor2 } from "../../utils";
 import { Addrs } from "../addrs";
 import * as utils from "../../utils";
 
+import * as path from "path"
+import { Modules } from "../../modules";
+
 type ReplacedBGMPair = {oldBGMId: number, replacedBGMId: number};
-interface IReplacedBGM {
+interface IReplacedBGMs {
     replacedBGM : ReplacedBGMPair[]
 };
 
-let replacedBGMData: IReplacedBGM = {
+const ReplacedBGMPath = path.join(path.dirname(path.dirname(path.dirname(Modules.ED85.path.split('\\').join('/')))), 'bin', 'Win64', 'ED8Frida','replacedBGM.json');
+
+let replacedBGMData: IReplacedBGMs = {
     replacedBGM : []
 };
 
@@ -27,6 +32,26 @@ export function addToReplacedBGMList(BgmPair: ReplacedBGMPair) {
 
     if(!isReplacing) {
         replacedBGMData.replacedBGM.push(BgmPair);
+    }
+}
+
+export function writeReplacedBGMToJSON() {
+    // utils.log("Writting replacedBGMData to replacedBGM.json.");
+    const out = JSON.stringify(replacedBGMData);
+    try {
+        File.writeAllText(ReplacedBGMPath, out);
+    } catch (err) {
+        utils.log(`File.writeAllText Error: ${err}`)
+    }
+}
+
+export function loadReplacedBGMFromJSON() {
+    // utils.log(`Loading replacedBGMData from replacedBGM.json.`);
+    try {
+        const inStr = File.readAllText(ReplacedBGMPath);
+        replacedBGMData = JSON.parse(inStr);
+    } catch (err) {
+        utils.log(`File.readAllText Error: ${err}`);
     }
 }
 
