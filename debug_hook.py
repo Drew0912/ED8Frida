@@ -10,7 +10,7 @@ ENEMY_SBREAK = True
 BTL_CHANGE_UNIT = True
 
 # Requires bgmId_table Metadata.
-PLAY_BGM_MENU = True
+BGM_MENU = True
 # Requires itemId_table Metadata.
 ITEM_MENU = True
 
@@ -18,6 +18,9 @@ DIFF_MOD_MENU = True
 
 # Notes:
 # Nested menus can only be 4 layers deep, have to replace menus using same menuLevel/menuVar instead.
+# Regs used vanilla: 0x00, 0x01, 0x02, 0x03
+# Regs used modifies: 
+# - 0x1D = SBreak
 
 # Functions to replace
 def funcCallBack(name: str, f: Callable):
@@ -58,6 +61,9 @@ def runCallBack(g):
 
     for f in [
         OpenCampMenu,
+        testFunc,
+        testFunc2,
+        UnknownBGMText,
     ]:
         scena.Code(f.__name__)(f)
 
@@ -113,6 +119,20 @@ def getBGMList():
 
         bgmList.append((bgmId, bgmName))
 
+    return sorted(bgmList, key = lambda e: e[0])
+
+# Generate and return Python list [bgmId, bgmName] (sorted by bgmName) for BGMs from bgmId_table Metadata.
+def getBGMListSortedByFileName():
+    from Falcom.ED85.Metadata.bgmId_table import bgmIdTable
+
+    bgmList = []
+
+    for bgmId, bgmName in bgmIdTable.items():
+        if not isinstance(bgmId, int):
+            continue
+
+        bgmList.append((bgmId, bgmName))
+
     return sorted(bgmList, key = lambda e: e[1])
 
 # Debug menu with functions from vanilla debug.dat
@@ -146,99 +166,144 @@ def DebugMenu(menuVar):
 # Custom Menus
 
 def bgmMenu(menuVar):
-    def playBGM(id: int):
+    # endLabel = genLabel()
+
+    bgmList = getBGMList() # max size of getBGMList() is 419.
+
+    # Play BGM Menus:
+    def playBGM(id: int, menuLevel: int):
         PlayBGM(id, 1.0, 0x0000, 0x00000000, 0x00)
+        # for i in range(menuLevel, 0, -1):
+        #     MenuCmd(0x03, i)
+        # Jump(endLabel)
 
-    def playBGM1():
-        items = []
-        for bgmId, bgmName in getBGMList()[:100]:
-            items.append((
-                f'{"File: "+ bgmName + ", BGM ID: " + str(bgmId)}', wrapper(playBGM, bgmId),
-            ))
-
+    def playBgmMenu(menuLevel: int):
+        items = [('BGM1', wrapper(playBgmMenu2, 0, 150, menuLevel+1)),
+                 ('BGM2', wrapper(playBgmMenu2, 150, 300, menuLevel+1)),
+                 ('BGM3', wrapper(playBgmMenu2, 300, 419, menuLevel+1)),
+                 ]
+        
         ShowMenu(
-            menuVar+1,
-            2,
+            menuVar+(menuLevel-1),
+            menuLevel,
             *items,
             fontSize = 33.0,
             pos = (500, 24),
             height = 30,
         )
 
-    def playBGM2():
+    def playBgmMenu2(bgmListStartIndex: int, bgmListEndIndex: int, menuLevel: int):
         items = []
-        for bgmId, bgmName in getBGMList()[100:200]:
-            items.append((
-                f'{"File: "+ bgmName + ", BGM ID: " + str(bgmId)}', wrapper(playBGM, bgmId),
-            ))
+        for bgmId, bgmName in bgmList[bgmListStartIndex:bgmListEndIndex]:
+            items.append((f"FileName: {bgmName}, BgmID: {str(bgmId)} / {hex(bgmId)}", wrapper(playBGM, bgmId, menuLevel)))
 
         ShowMenu(
-            menuVar+1,
-            2,
+            menuVar+(menuLevel-1),
+            menuLevel,
+            *items,
+            fontSize = 33.0,
+            pos = (500, 24),
+            height = 30,
+        )
+    
+    # Replace BGM Menus:
+    def replaceBGM(oldId: int, newId: int):
+        Call2SE(f'ReplaceBGM({oldId}, {newId})')
+
+    def replaceBgmMenu(menuLevel: int):
+        items = [('BGM1', wrapper(replaceBgmMenu2, 0, 150, menuLevel+1)),
+                 ('BGM2', wrapper(replaceBgmMenu2, 150, 300, menuLevel+1)),
+                 ('BGM3', wrapper(replaceBgmMenu2, 300, 419, menuLevel+1)),
+                 ]
+        
+        ShowMenu(
+            menuVar+(menuLevel-1),
+            menuLevel,
             *items,
             fontSize = 33.0,
             pos = (500, 24),
             height = 30,
         )
 
-    def playBGM3():
+    def replaceBgmMenu2(bgmListStartIndex: int, bgmListEndIndex: int, menuLevel: int):
         items = []
-        for bgmId, bgmName in getBGMList()[200:300]:
-            items.append((
-                f'{"File: "+ bgmName + ", BGM ID: " + str(bgmId)}', wrapper(playBGM, bgmId),
-            ))
+        for bgmId, bgmName in bgmList[bgmListStartIndex:bgmListEndIndex]:
+            items.append((f"FileName: {bgmName}, BgmID: {str(bgmId)} / {hex(bgmId)}", wrapper(getBgmIdMenu, bgmId, menuLevel-1)))
 
         ShowMenu(
-            menuVar+1,
-            2,
+            menuVar+(menuLevel-1),
+            menuLevel,
             *items,
             fontSize = 33.0,
             pos = (500, 24),
             height = 30,
         )
 
-    def playBGM4():
-        items = []
-        for bgmId, bgmName in getBGMList()[300:400]:
-            items.append((
-                f'{"File: "+ bgmName + ", BGM ID: " + str(bgmId)}', wrapper(playBGM, bgmId),
-            ))
-
+    # Replace this function to one that saves oldId to reg, jump to new non-nested menu, reload reg and then replace bgm
+    # To avoid large nested menus resulting in large files.
+    # Does not help as getting the oldId out of reg is large.
+    def getBgmIdMenu(oldId: int, menuLevel: int):
+        items = [('BGM1', wrapper(getBgmIdMenu2, 0, 150, oldId, menuLevel+1)),
+                 ('BGM2', wrapper(getBgmIdMenu2, 150, 300, oldId, menuLevel+1)),
+                 ('BGM3', wrapper(getBgmIdMenu2, 300, 419, oldId, menuLevel+1)),
+                 ]
+        
         ShowMenu(
-            menuVar+1,
-            2,
+            menuVar+(menuLevel-1),
+            menuLevel,
             *items,
             fontSize = 33.0,
             pos = (500, 24),
             height = 30,
+            autoExit = True,
         )
 
-    def playBGM5():
+    def getBgmIdMenu2(bgmListStartIndex: int, bgmListEndIndex: int, oldId: int, menuLevel: int):
         items = []
-        for bgmId, bgmName in getBGMList()[400:]:
-            items.append((
-                f'{"File: "+ bgmName + ", BGM ID: " + str(bgmId)}', wrapper(playBGM, bgmId),
-            ))
+        for bgmId, bgmName in bgmList[bgmListStartIndex:bgmListEndIndex]:
+            items.append((f"FileName: {bgmName}, BgmID: {str(bgmId)} / {hex(bgmId)}", wrapper(replaceBGM, oldId, bgmId)))
 
         ShowMenu(
-            menuVar+1,
-            2,
+            menuVar+(menuLevel-1),
+            menuLevel,
             *items,
             fontSize = 33.0,
             pos = (500, 24),
             height = 30,
+            autoExit = True,
         )
+
+    # Main Menu:
+    OP_23(0x05, 0xFFFF, 100, 0xFFFF, 0xFFFF, 0x00)
+
+    Talk(
+        0xFFFF,
+        (
+            0xB,
+            TxtCtl.ShowAll,
+            f'Lists generated using vanilla t_bgm, should have all items\n',
+            f'but may not be sorted correctly. (not checked)',
+            TxtCtl.NewLine,
+            # TxtCtl.Enter,
+        ),
+    )
 
     ShowMenu(
         menuVar,
         1,
-        ("bgm1-100", playBGM1),
-        ("bgm101-200", playBGM2),
-        ("bgm201-300", playBGM3),
-        ("bgm301-400", playBGM4),
-        ("bgm401...", playBGM5),
+        ("Play BGM", wrapper(playBgmMenu, 2)),
+        ("Replace BGM", wrapper(replaceBgmMenu, 2)),
+        ("Reset Replaced BGMs", wrapper(Call2SE, "ResetBGM()")),
+        ("Save Replaced BGMs", wrapper(Call2SE, "WriteReplacedBGMToJSON()")),
+        ("Load Replaced BGMs", wrapper(Call2SE, "LoadReplacedBGMFromJSON()")),
         fontSize=33.0,
     )
+    # label(endLabel)
+
+    OP_25(0x00)
+    OP_25(0x01)
+    OP_23(0x05, 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF, 0x00)
+
 
 def itemMenu(menuVar):
     # AddItem opcode named wrong. rename.
@@ -898,30 +963,95 @@ def ChangeModelMenu(menuVar):
     FormationCmd(0x1B, 0x01)
     FormationCmd(0x1C, 0x01)
 
-def testFunc2():
+def testFunc():
         
-    ReplaceBGM(101, 2050) #works
-    # ReplaceBGM(125, 2050) #Does not work
+    # ReplaceBGM(101, 2050) #Does work
+    # ReplaceBGMReset()
+    # ReplaceBGM(2061, 2050) #Does not work
+    # # ReplaceBGM(125, 2050) #Does not work
+
+    # Call2SE('ReplaceBGM(2061, 2050)')
+    # CreateThread(0xFFFF, 0x5, 'testFunc2', ScriptId.Debug)
+    # WaitForThreadExit(0xFFFF, 0x5)
+    # TerminateThread(0xFFFF, 0x5)
+    # Call(ScriptId.Debug, 'testFunc2')
+
+    Sleep(200) # OP_16
+    # WaitForMsg()
+
+    OP_25(0x00)
+    OP_25(0x01)
+
+    Return()
+
+
+def testFunc2():
+    x = 0xFFFF - 20
+    y = 0xFFFF - 20
+    depth = 0xFFFF
+    unk = depth
+    # Param6: 0x03 good
+    OP_23(0x05, x, y, depth, unk, 0x3)
+    # OP_23(0x05, 65535, 65535, 65535, 65535, 0x00)
 
     Talk(
         0xFFFF,
         (
-            0xB,
+            0xB, #colour?
             TxtCtl.ShowAll,
-            'Debug: Test Func\n',
-            'Replaced BGM 101 with 2050',
+            'Debug: Test Func2\n',
+            'BGM 5',
+            # TxtCtl.NewLine2,
             TxtCtl.Enter,
         ),
     )
 
-    WaitForMsg()
+    CreateThread(0xFFFF, 0x5, 'testFunc', ScriptId.Debug)
+    # Call(ScriptId.Debug, 'testFunc')
+    # WaitForThreadExit(0xFFFF, 0x5)
 
-    OP_25(0x00)
-    OP_25(0x01)
-    OP_23(0x05, 65535, 65535, 65535, 65535, 0x00)
+    # DebugString("Debug")
 
-def testFunc():
-    AddItem(0x00, 0x0080, 9)
+    # WaitForMsg() # Does not execute with ED8Frida Call2 (CreateThread?)
+    # Sleep(200) # Does not execute with ED8Frida Call2 (CreateThread?)
+
+    # OP_25(0x00)
+    # OP_25(0x01)
+    # OP_23(0x05, 65535, 65535, 65535, 65535, 0x00)
+
+
+    Return()
+
+def UnknownBGMText():
+    x = 0xFFFF - 20
+    y = 0xFFFF - 20
+    depth = 0xFFFF
+    unk = depth
+    # Param6: 0x03 good
+    OP_23(0x05, x, y, depth, unk, 0x3)
+    # OP_23(0x05, 65535, 65535, 65535, 65535, 0x00)
+
+    Talk(
+        0xFFFF,
+        (
+            0xB, #colour?
+            TxtCtl.ShowAll,
+            'Debug: Test Func\n',
+            'Unknown BGM ',
+            # TxtCtl.NewLine2,
+            TxtCtl.Enter,
+        ),
+    )
+
+    # WaitForMsg() # Does not execute with ED8Frida Call2 (CreateThread?)
+    # Sleep(200) # Does not execute with ED8Frida Call2 (CreateThread?)
+
+    # OP_25(0x00)
+    # OP_25(0x01)
+    # OP_23(0x05, 65535, 65535, 65535, 65535, 0x00)
+
+
+    Return()
 
 def ClearFlagsFunc():
     BattleClearFlags(0x00000020) #Clear no BO
@@ -974,8 +1104,8 @@ def FC_ActMenu_MOD():
                     ('ModelBattleStyle swap (experimental/not implemented)', wrapper(ChangeModelMenu, 0xF7)),
                     ]
     
-    if (PLAY_BGM_MENU):
-        showMenuList.append(('Play BGM (generated from vanilla t_bgm)', wrapper(bgmMenu, 0xF7)))
+    if (BGM_MENU):
+        showMenuList.append(('BGM menu (generated from vanilla t_bgm)', wrapper(bgmMenu, 0xF7)))
     if (ITEM_MENU):
         showMenuList.append(('Item menu (generated from vanilla t_item)', wrapper(itemMenu, 0xF7)))
     if (DIFF_MOD_MENU):

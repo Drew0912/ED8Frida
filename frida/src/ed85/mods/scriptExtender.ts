@@ -5,7 +5,7 @@ import * as utils from "../../utils";
 
 import { setLoggerLevel } from "./logger";
 import { displayEnemyCPByName, replaceDescriptionWithEnemyStats } from "./advancedEnemyStats";
-import { addToReplacedBGMList, resetReplacedBGMList } from "./bgmControl";
+import { addToReplacedBGMList, loadReplacedBGMFromJSON, resetReplacedBGMList, writeReplacedBGMToJSON } from "./bgmControl";
 
 let tracing = false;
 export function setTracing(bool : boolean) {
@@ -84,6 +84,12 @@ export function hookScriptExtender() {
                 }
                 else if (stringInF1 == 'ResetBGM()'){
                     resetReplacedBGMList();
+                }
+                else if (stringInF1 == 'WriteReplacedBGMToJSON()') {
+                    writeReplacedBGMToJSON();
+                }
+                else if (stringInF1 == 'LoadReplacedBGMFromJSON()') {
+                    loadReplacedBGMFromJSON();
                 }
                 else {
                     utils.log(`ED8Frida.scriptExtender: Unknown string (${stringInF1})`);
